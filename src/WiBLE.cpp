@@ -247,6 +247,12 @@ void WiBLE::startBeaconMode(String uuid, uint16_t major, uint16_t minor) {
     }
 }
 
+void WiBLE::startBroadcasting(uint16_t manufacturerId, const uint8_t* data, size_t length) {
+    if (bleManager) {
+        bleManager->startBroadcasting(manufacturerId, data, length);
+    }
+}
+
 // ============================================================================
 // INTERNAL METHODS
 // ============================================================================

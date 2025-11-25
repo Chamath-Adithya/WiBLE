@@ -259,6 +259,31 @@ void BLEManager::startBeacon(String uuid, uint16_t major, uint16_t minor, int8_t
     advertisingActive = true;
     LogManager::info("iBeacon started");
 }
+
+void BLEManager::startBroadcasting(uint16_t manufacturerId, const uint8_t* data, size_t length) {
+    if (!initialized || !advertising) return;
+
+    stopAdvertising();
+
+    BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
+    
+    oAdvertisementData.setFlags(0x04); // BR_EDR_NOT_SUPPORTED
+    
+    std::string mfgData;
+    mfgData += (char)(manufacturerId & 0xFF);
+    mfgData += (char)((manufacturerId >> 8) & 0xFF);
+    
+    for(size_t i=0; i<length; i++) {
+        mfgData += (char)data[i];
+    }
+    
+    oAdvertisementData.setManufacturerData(mfgData);
+    advertising->setAdvertisementData(oAdvertisementData);
+    
+    advertising->start();
+    advertisingActive = true;
+    LogManager::info("Broadcasting started");
+}
 void BLEManager::onDisconnection(BLEDisconnectionCallback callback) { disconnectionCallback = callback; }
 void BLEManager::onDataReceived(BLEDataReceivedCallback callback) { dataReceivedCallback = callback; }
 

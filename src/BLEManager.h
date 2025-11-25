@@ -239,6 +239,11 @@ public:
      */
     void startBeacon(String uuid, uint16_t major, uint16_t minor, int8_t rssiAt1m);
 
+    /**
+     * Start broadcasting custom manufacturer data
+     */
+    void startBroadcasting(uint16_t manufacturerId, const uint8_t* data, size_t length);
+
     // ========================================================================
     // CONNECTION MANAGEMENT
     // ========================================================================

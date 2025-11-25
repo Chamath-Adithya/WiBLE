@@ -299,6 +299,14 @@ public:
      * @param minor Minor number
      */
     void startBeaconMode(String uuid, uint16_t major, uint16_t minor);
+
+    /**
+     * Start Broadcasting Custom Data (Method 3)
+     * @param manufacturerId 2-byte Company ID (e.g., 0xFFFF)
+     * @param data Custom data bytes
+     * @param length Length of data
+     */
+    void startBroadcasting(uint16_t manufacturerId, const uint8_t* data, size_t length);
     
     // ========================================================================
     // CALLBACK REGISTRATION
