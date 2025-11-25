@@ -7,14 +7,13 @@
 
 1. [Architecture Overview](#architecture-overview)
 2. [Core Components](#core-components)
-3. [Implementation Phases](#implementation-phases)
-4. [Design Patterns Used](#design-patterns-used)
-5. [Security Architecture](#security-architecture)
-6. [Error Handling Strategy](#error-handling-strategy)
-7. [Testing Strategy](#testing-strategy)
-8. [Performance Optimization](#performance-optimization)
-9. [Platform Considerations](#platform-considerations)
-10. [Migration from Simple Library](#migration-from-simple-library)
+3. [Design Patterns Used](#design-patterns-used)
+4. [Security Architecture](#security-architecture)
+5. [Error Handling Strategy](#error-handling-strategy)
+6. [Testing Strategy](#testing-strategy)
+7. [Performance Optimization](#performance-optimization)
+8. [Platform Considerations](#platform-considerations)
+9. [Migration from Simple Library](#migration-from-simple-library)
 
 ---
 
@@ -203,145 +202,6 @@ After 5 failures: Circuit open (5min cooldown)
 9. Notify success
 10. Transition to normal operation
 ```
-
----
-
-## Implementation Phases
-
-### **Phase 1: Foundation (3-5 weeks)**
-
-**Week 1-2**: Core Structure
-- Set up directory structure
-- Implement WiBLE main class skeleton
-- Create configuration structs
-- Basic error types and Result<T>
-
-**Week 3-4**: State Machine
-- Implement StateManager with FSM
-- Define all states and transitions
-- Add timeout handling
-- Create state persistence
-
-**Week 5**: Platform Abstraction
-- ESP32 BLE adapter
-- ESP32 WiFi adapter
-- Storage adapter (NVS)
-
-**Deliverables**:
-- Compiles on ESP32
-- Basic state transitions work
-- Can initialize BLE and WiFi
-
----
-
-### **Phase 2: Core Services (7-9 weeks)**
-
-**Week 6-7**: Security Manager
-- Integrate mbedTLS
-- ECDH key exchange
-- AES encryption/decryption
-- Session management
-
-**Week 8-10**: BLE Manager
-- GATT service setup
-- Characteristic handlers
-- MTU negotiation
-- Operation queue
-
-**Week 11-12**: WiFi Manager
-- Connection logic
-- Retry mechanism
-- Auto-reconnect
-- Network scanning
-
-**Week 13-14**: Orchestrator
-- Provisioning workflow
-- Progress tracking
-- Error recovery
-
-**Deliverables**:
-- End-to-end provisioning works
-- Encrypted credential transfer
-- WiFi connection successful
-
----
-
-### **Phase 3: Protocol Layer (4-5 weeks)**
-
-**Week 15-16**: Data Layer
-- JSON/CBOR serialization
-- Protocol versioning
-- Chunked transfer
-
-**Week 17-18**: Error Handling
-- Comprehensive error taxonomy
-- Retry policies
-- Circuit breaker
-- Graceful degradation
-
-**Week 19**: Events & Callbacks
-- Callback system
-- Event propagation
-- Progress notifications
-
-**Deliverables**:
-- Robust error handling
-- Large data transfers work
-- All callbacks functional
-
----
-
-### **Phase 4: Quality & Scale (5-7 weeks)**
-
-**Week 20-22**: Testing
-- Unit tests (70+ tests)
-- Integration tests
-- BLE device mocks
-- CI/CD pipeline
-
-**Week 23-24**: Observability
-- Structured logging
-- Metrics collection
-- Performance profiling
-
-**Week 25-26**: Documentation
-- API documentation (Doxygen)
-- Usage examples
-- Architecture diagrams
-- Migration guide
-
-**Deliverables**:
-- >80% test coverage
-- Production-ready logging
-- Complete documentation
-
----
-
-### **Phase 5: Advanced Features (6-11 weeks)**
-
-**Week 27-28**: Multi-device Support
-- Connection pooling
-- Concurrent provisioning
-
-**Week 29-31**: Background Operations
-- Task scheduler
-- Power optimization
-- Sleep mode handling
-
-**Week 32-34**: OTA Updates (Optional)
-- OTA manager
-- Firmware validation
-- Rollback support
-
-**Week 35-37**: Cloud Integration (Optional)
-- MQTT client
-- REST API
-- Device registration
-
-**Deliverables**:
-- Multi-device provisioning
-- OTA working
-- Cloud connectivity
 
 ---
 
@@ -800,60 +660,7 @@ provisioning.onConnect([]() {
 });
 
 // New
-provisioning.onBLEConnected([](String address) {
-    Serial.printf("Connected: %s\n", address.c_str());
-});
-
-provisioning.onProvisioningComplete([](bool success, uint32_t duration) {
-    Serial.printf("Provisioning %s in %dms\n", 
-                  success ? "succeeded" : "failed", duration);
+provisioning.onBLEConnected([](String addr) {
+    Serial.printf("Connected: %s\n", addr.c_str());
 });
 ```
-
-**Step 4**: Handle Errors
-```cpp
-// Old
-if (!provisioning.provision(ssid, password)) {
-    Serial.println("Failed");
-}
-
-// New
-provisioning.onError([](ErrorCode code, String message, bool canRetry) {
-    Serial.printf("Error %d: %s (canRetry=%d)\n", code, message.c_str(), canRetry);
-    if (canRetry) {
-        // Automatic retry handled by library
-    }
-});
-```
-
----
-
-## Conclusion
-
-WiBLE represents a **production-grade evolution** of simple BLE provisioning:
-
-**Key Improvements**:
-1. ✅ **Security**: ECDH + AES-256 encryption
-2. ✅ **Reliability**: FSM + retry logic + circuit breaker
-3. ✅ **Performance**: <18s provisioning (50% faster)
-4. ✅ **Scalability**: Multi-device support
-5. ✅ **Maintainability**: Clean architecture + tests
-6. ✅ **Developer Experience**: Simple API + comprehensive docs
-
-**Next Steps**:
-1. Implement Phase 1 (Foundation) - 3-5 weeks
-2. Validate with early adopters
-3. Iterate based on feedback
-4. Release v2.0 stable
-
-**Resources**:
-- API Documentation: `/docs/api`
-- Examples: `/examples`
-- GitHub: `https://github.com/yourorg/wible`
-- Support: `support@wible.dev`
-
----
-
-**License**: MIT  
-**Author**: WiBLE Development Team  
-**Last Updated**: 2025-01-15
