@@ -5,7 +5,21 @@
 #ifndef WIBLE_DEFS_H
 #define WIBLE_DEFS_H
 
+#include <Arduino.h>
+
 namespace WiBLE {
+
+struct WiFiCredentials {
+    String ssid;
+    String password;
+    String securityType = "WPA2";
+    bool hidden = false;
+    
+    bool isValid() const {
+        return !ssid.isEmpty() && ssid.length() <= 32 && 
+               password.length() <= 64;
+    }
+};
 
 enum class ProvisioningState {
     IDLE,

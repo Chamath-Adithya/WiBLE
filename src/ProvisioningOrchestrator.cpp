@@ -77,7 +77,7 @@ void ProvisioningOrchestrator::handleCredentials(const std::vector<uint8_t>& dat
     }
     
     // 3. Connect
-    stateManager->handleEvent(StateEvent::START_WIFI_CONNECT);
+    stateManager->handleEvent(StateEvent::WIFI_CONNECT_STARTED);
     if (wifiManager) {
         wifiManager->connect(creds.ssid, creds.password);
     }
@@ -126,7 +126,7 @@ void ProvisioningOrchestrator::onWiFiConnected(const ConnectionInfo& info) {
 }
 
 void ProvisioningOrchestrator::onWiFiDisconnected(WiFiDisconnectReason reason) {
-    stateManager->handleEvent(StateEvent::WIFI_DISCONNECT);
+    stateManager->handleEvent(StateEvent::WIFI_DISCONNECTED);
     sendResponse("ERROR", "WiFi Disconnected");
 }
 
