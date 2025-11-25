@@ -206,6 +206,40 @@ public:
     void setScanResponseData(const std::vector<uint8_t>& data);
     
     // ========================================================================
+    // SCANNING (GATEWAY MODE)
+    // ========================================================================
+    
+    /**
+     * Start scanning for BLE devices
+     * @param duration Duration in seconds
+     */
+    void startScanning(uint32_t duration);
+    
+    /**
+     * Stop scanning
+     */
+    void stopScanning();
+    
+    /**
+     * Set callback for discovered devices
+     */
+    using BLEScanCallback = std::function<void(const String& address, int rssi, const String& manufacturerData)>;
+    void setScanCallback(BLEScanCallback callback);
+
+    // ========================================================================
+    // BEACON MODE (PHASE 8)
+    // ========================================================================
+
+    /**
+     * Start advertising as an iBeacon
+     * @param uuid UUID string (e.g., "12345678-1234-1234-1234-1234567890ab")
+     * @param major Major number (0-65535)
+     * @param minor Minor number (0-65535)
+     * @param rssiAt1m RSSI at 1 meter (typically -59)
+     */
+    void startBeacon(String uuid, uint16_t major, uint16_t minor, int8_t rssiAt1m);
+
+    // ========================================================================
     // CONNECTION MANAGEMENT
     // ========================================================================
     
@@ -448,6 +482,7 @@ private:
     BLEDataReceivedCallback dataReceivedCallback;
     MTUChangeCallback mtuChangeCallback;
     RSSIUpdateCallback rssiUpdateCallback;
+    BLEScanCallback scanCallback;
     
     // RSSI monitoring
     bool rssiMonitoringEnabled;

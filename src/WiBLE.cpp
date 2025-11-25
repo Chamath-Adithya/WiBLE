@@ -233,6 +233,20 @@ void WiBLE::onDataReceived(DataReceivedCallback callback) {
     dataReceivedCallback = callback;
 }
 
+void WiBLE::scanForDevices(uint32_t duration, std::function<void(const String&, int, const String&)> callback) {
+    if (bleManager) {
+        bleManager->setScanCallback(callback);
+        bleManager->startScanning(duration);
+    }
+}
+
+void WiBLE::startBeaconMode(String uuid, uint16_t major, uint16_t minor) {
+    if (bleManager) {
+        // Default RSSI at 1m is -59dBm
+        bleManager->startBeacon(uuid, major, minor, -59);
+    }
+}
+
 // ============================================================================
 // INTERNAL METHODS
 // ============================================================================

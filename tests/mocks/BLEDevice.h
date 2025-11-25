@@ -4,6 +4,32 @@
 #include "Arduino.h"
 #include <vector>
 #include <string>
+#include <functional>
+
+// Mock ESP32 UUID types
+typedef struct {
+    uint16_t len;
+    union {
+        uint16_t uuid16;
+        uint32_t uuid32;
+        uint8_t uuid128[16];
+    } uuid;
+} esp_bt_uuid_t;
+
+class BLEUUID {
+public:
+    BLEUUID(const char*) {}
+    esp_bt_uuid_t getNative() {
+        esp_bt_uuid_t u;
+        u.len = 16; // Mock as 128-bit
+        return u;
+    }
+};
+
+class BLEAddress {
+public:
+    BLEAddress() {}
+};
 
 class BLEServerCallbacks;
 class BLECharacteristicCallbacks;
@@ -39,13 +65,37 @@ public:
     void start() {}
 };
 
+class BLEAdvertisementData {
+public:
+    void setFlags(uint8_t) {}
+    void setManufacturerData(std::string) {}
+    void setServiceUUID(const char*) {}
+};
+
 class BLEAdvertising {
 public:
     void addServiceUUID(const char* uuid) {}
-    void setScanResponse(bool) {}
-    void setMinPreferred(uint32_t) {}
     void start() {}
     void stop() {}
+    void setScanResponse(bool) {}
+    void setMinPreferred(uint8_t) {}
+    void setAdvertisementData(BLEAdvertisementData&) {}
+    void setScanResponseData(BLEAdvertisementData&) {}
+};
+
+class BLEScanResults {
+public:
+    // Minimal mock for BLEScanResults
+};
+
+class BLEScan {
+public:
+    void setActiveScan(bool) {}
+    void setInterval(uint16_t) {}
+    void setWindow(uint16_t) {}
+    BLEScanResults start(uint32_t, bool) { return BLEScanResults(); }
+    void stop() {}
+    void clearResults() {}
 };
 
 class BLEServer {
@@ -58,9 +108,10 @@ public:
 
 class BLEDevice {
 public:
-    static void init(const char* name) {}
+    static void init(std::string) {}
     static BLEServer* createServer() { return new BLEServer(); }
     static BLEAdvertising* getAdvertising() { return new BLEAdvertising(); }
+    static BLEScan* getScan() { return new BLEScan(); }
 };
 
 class BLEServerCallbacks {

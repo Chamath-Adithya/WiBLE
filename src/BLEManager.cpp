@@ -198,6 +198,67 @@ bool BLEManager::isConnected() const { return bleServer->getConnectedCount() > 0
 uint8_t BLEManager::getConnectionCount() const { return bleServer->getConnectedCount(); }
 void BLEManager::processOperationQueue() { /* TODO: Implement queue processing */ }
 void BLEManager::onConnection(BLEConnectionCallback callback) { connectionCallback = callback; }
+void BLEManager::setScanCallback(BLEScanCallback callback) {
+    scanCallback = callback;
+}
+
+// ============================================================================
+// BEACON MODE
+// ============================================================================
+
+void BLEManager::startBeacon(String uuid, uint16_t major, uint16_t minor, int8_t rssiAt1m) {
+    if (!initialized || !advertising) return;
+
+    stopAdvertising(); // Stop any existing advertising
+
+    BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
+    BLEAdvertisementData oScanResponseData = BLEAdvertisementData();
+    
+    // iBeacon Flag (0x020106)
+    oAdvertisementData.setFlags(0x04); // BR_EDR_NOT_SUPPORTED 0x04
+    
+    // Construct iBeacon Payload
+    // Format: [Len] [Type] [CompanyID(2)] [BeaconType(2)] [ProximityUUID(16)] [Major(2)] [Minor(2)] [TxPower(1)]
+    // Total Manufacturer Data Length: 25 bytes
+    
+    std::string mfgData;
+    mfgData += (char)0x4C; mfgData += (char)0x00; // Apple Company ID (0x004C)
+    mfgData += (char)0x02; mfgData += (char)0x15; // iBeacon Type (0x02, 0x15)
+    
+    // UUID (Need to parse string to bytes)
+    // For simplicity in this implementation, we'll assume a fixed UUID or parse it manually
+    // A real implementation would use a UUID parser. 
+    // Let's use a dummy UUID for now if parsing is complex, or try basic parsing.
+    // Actually, BLEUUID class can parse it.
+    BLEUUID bleUUID(uuid.c_str());
+    esp_bt_uuid_t rawUUID = bleUUID.getNative();
+    
+    // Check if it's 128-bit
+    if (rawUUID.len == 16) {
+        for(int i=0; i<16; i++) mfgData += (char)rawUUID.uuid.uuid128[i];
+    } else {
+        // Fallback or error
+        LogManager::error("Invalid Beacon UUID length");
+        return;
+    }
+
+    mfgData += (char)((major >> 8) & 0xFF);
+    mfgData += (char)(major & 0xFF);
+    
+    mfgData += (char)((minor >> 8) & 0xFF);
+    mfgData += (char)(minor & 0xFF);
+    
+    mfgData += (char)rssiAt1m;
+    
+    oAdvertisementData.setManufacturerData(mfgData);
+    
+    advertising->setAdvertisementData(oAdvertisementData);
+    advertising->setScanResponseData(oScanResponseData);
+    
+    advertising->start();
+    advertisingActive = true;
+    LogManager::info("iBeacon started");
+}
 void BLEManager::onDisconnection(BLEDisconnectionCallback callback) { disconnectionCallback = callback; }
 void BLEManager::onDataReceived(BLEDataReceivedCallback callback) { dataReceivedCallback = callback; }
 

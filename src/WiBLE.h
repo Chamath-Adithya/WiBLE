@@ -284,6 +284,21 @@ public:
      * Send custom data over WiFi
      */
     Result<bool> sendWiFiData(const String& endpoint, const String& data);
+
+    /**
+     * Start scanning for BLE devices (Gateway Mode)
+     * @param duration Duration in seconds
+     * @param callback Callback for discovered devices
+     */
+    void scanForDevices(uint32_t duration, std::function<void(const String&, int, const String&)> callback);
+
+    /**
+     * Start Beacon Mode (Phase 8)
+     * @param uuid UUID string
+     * @param major Major number
+     * @param minor Minor number
+     */
+    void startBeaconMode(String uuid, uint16_t major, uint16_t minor);
     
     // ========================================================================
     // CALLBACK REGISTRATION
