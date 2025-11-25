@@ -45,9 +45,10 @@ bool WiFiManager::initialize(const WiFiConfig& config) {
 // SCANNING
 // ============================================================================
 
-void WiFiManager::scanNetworksAsync() {
+void WiFiManager::scanNetworksAsync(WiFiScanCompleteCallback callback) {
     if (isScanning) return;
     
+    scanCompleteCallback = callback;
     isScanning = true;
     LogManager::info("Starting WiFi scan...");
     
@@ -55,9 +56,11 @@ void WiFiManager::scanNetworksAsync() {
     WiFi.scanNetworks(true);
 }
 
-std::vector<NetworkInfo> WiFiManager::getScanResults() {
+std::vector<NetworkInfo> WiFiManager::scanNetworks(bool showHidden) {
+    LogManager::info("Starting blocking WiFi scan...");
+    int16_t count = WiFi.scanNetworks(false); // Blocking
+    
     std::vector<NetworkInfo> networks;
-    int16_t count = WiFi.scanComplete();
     
     if (count == -2) {
         // Scan not triggered
@@ -81,7 +84,7 @@ std::vector<NetworkInfo> WiFiManager::getScanResults() {
             case WIFI_AUTH_WPA2_PSK: info.securityType = WiFiSecurityType::WPA2_PSK; break;
             case WIFI_AUTH_WPA_WPA2_PSK: info.securityType = WiFiSecurityType::WPA_WPA2_PSK; break;
             case WIFI_AUTH_WPA2_ENTERPRISE: info.securityType = WiFiSecurityType::WPA2_ENTERPRISE; break;
-            default: info.securityType = WiFiSecurityType::UNKNOWN; break;
+            default: info.securityType = WiFiSecurityType::OPEN; break; // Fallback
         }
         
         networks.push_back(info);
@@ -101,7 +104,7 @@ std::vector<NetworkInfo> WiFiManager::getScanResults() {
 // CONNECTION
 // ============================================================================
 
-ConnectionResult WiFiManager::connect(const String& ssid, const String& password) {
+ConnectionResult WiFiManager::connect(const String& ssid, const String& password, WiFiSecurityType securityType) {
     ConnectionResult result;
     
     LogManager::info("Connecting to WiFi: " + ssid);
@@ -121,12 +124,12 @@ ConnectionResult WiFiManager::connect(const String& ssid, const String& password
     // as it returns a Result.
     
     uint32_t start = millis();
-    while (WiFi.status() != WL_CONNECTED && millis() - start < config.connectTimeoutMs) {
+    while (WiFi.status() != WL_CONNECTED && millis() - start < config.connectionTimeoutMs) {
         delay(100);
-        if (connectionProgressCallback) {
+        if (progressCallback) {
             // Calculate progress roughly
-            uint8_t progress = (millis() - start) * 100 / config.connectTimeoutMs;
-            connectionProgressCallback(progress, "Connecting...");
+            uint8_t progress = (millis() - start) * 100 / config.connectionTimeoutMs;
+            progressCallback(progress, "Connecting...");
         }
     }
     
@@ -152,7 +155,7 @@ ConnectionResult WiFiManager::connect(const String& ssid, const String& password
         LogManager::error("WiFi Connection Failed");
         
         if (disconnectedCallback) {
-            disconnectedCallback(WiFiDisconnectReason::UNSPECIFIED, "Connection timeout");
+            disconnectedCallback(WiFiDisconnectReason::UNKNOWN, "Connection timeout");
         }
     }
     
@@ -239,7 +242,7 @@ void WiFiManager::onScanComplete(WiFiScanCompleteCallback callback) {
 }
 
 void WiFiManager::onConnectionProgress(WiFiConnectionProgressCallback callback) {
-    connectionProgressCallback = callback;
+    progressCallback = callback;
 }
 
 // ============================================================================

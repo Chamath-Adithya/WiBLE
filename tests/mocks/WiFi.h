@@ -13,6 +13,8 @@
 #define WIFI_AUTH_WPA_WPA2_PSK 4
 #define WIFI_AUTH_WPA2_ENTERPRISE 5
 
+#define WIFI_PS_MIN_MODEM 1
+
 // Mock types
 typedef int wifi_power_t;
 typedef int wifi_ps_type_t;

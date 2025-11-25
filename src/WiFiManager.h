@@ -60,6 +60,7 @@ struct WiFiConfig {
     uint8_t maxConnectionRetries = 3;
     uint32_t retryDelayMs = 2000;
     bool useExponentialBackoff = true;
+    bool persistCredentials = true;
     
     // Auto-reconnect
     bool autoReconnect = true;
@@ -516,6 +517,7 @@ private:
     
     // Scan state
     bool scanInProgress;
+    bool isScanning;
     std::vector<NetworkInfo> lastScanResults;
     
     // Internal methods
