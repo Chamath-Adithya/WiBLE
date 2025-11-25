@@ -17,6 +17,7 @@
 #include <map>
 #include <queue>
 #include <memory>
+#include <freertos/semphr.h>
 
 namespace WiBLE {
 

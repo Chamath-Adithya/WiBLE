@@ -15,12 +15,17 @@ public:
     String(const char* s) : std::string(s ? s : "") {}
     String(const std::string& s) : std::string(s) {}
     String(int i) : std::string(std::to_string(i)) {}
+    String(const char* s, size_t len) : std::string(s, len) {}
     
     bool isEmpty() const { return empty(); }
     const char* c_str() const { return std::string::c_str(); }
     
     // Operator overloading for concatenation
     String operator+(const String& other) const {
+        return String(std::string(*this) + std::string(other));
+    }
+
+    String operator+(const char* other) const {
         return String(std::string(*this) + std::string(other));
     }
 };

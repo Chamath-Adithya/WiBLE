@@ -6,7 +6,8 @@
 #define WIBLE_LOG_MANAGER_H
 
 #include <Arduino.h>
-#include "../WiBLE.h"
+#include "../WiBLE_Defs.h"
+// #include "../WiBLE.h" // Avoid circular dependency if possible
 
 namespace WiBLE {
 
