@@ -398,7 +398,13 @@ pio run -t format
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👥 Author
+
+**Chamath Adithya** - *SOLVEO*
+- Email: achamth1@gmail.com
+- GitHub: [Chamath-Adithya](https://github.com/Chamath-Adithya)
 
 ---
 
