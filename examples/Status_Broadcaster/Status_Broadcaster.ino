@@ -7,6 +7,7 @@
  * The device broadcasts sensor data (e.g., Temperature, Humidity) 
  * in the Manufacturer Data field of the advertising packet.
  * No connection is required to read this data.
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <WiBLE.h>

@@ -6,6 +6,7 @@
  * - Custom data handling (sending/receiving)
  * - Security configuration
  * - Manual control
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <WiBLE.h>

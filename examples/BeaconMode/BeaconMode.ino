@@ -3,6 +3,7 @@
  * 
  * Demonstrates the "Beacon Mode" capability of WiBLE.
  * The ESP32 acts as an iBeacon when not in provisioning mode.
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <WiBLE.h>

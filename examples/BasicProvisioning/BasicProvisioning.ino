@@ -17,6 +17,7 @@
  * RECOMMENDATION:
  * This is the recommended starting point for production applications.
  * It includes robust error handling, logging, and a CLI.
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <Arduino.h>

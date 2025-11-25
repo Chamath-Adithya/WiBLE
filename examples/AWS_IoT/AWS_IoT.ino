@@ -7,6 +7,7 @@
  * 1. Provision WiFi via WiBLE.
  * 2. Receive AWS Certificates (Root CA, Cert, Key) via WiBLE Custom Data.
  * 3. Connect to AWS IoT Core using MQTTS.
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <WiBLE.h>

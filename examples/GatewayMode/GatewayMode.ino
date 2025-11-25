@@ -4,6 +4,7 @@
  * Demonstrates the "Dual Role" capability of WiBLE.
  * The ESP32 acts as a Provisioning Server (waiting for mobile app)
  * AND as a Gateway Client (scanning for other BLE devices).
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <WiBLE.h>

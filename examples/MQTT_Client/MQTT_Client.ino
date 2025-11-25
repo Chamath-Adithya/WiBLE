@@ -8,6 +8,7 @@
  * 4. Publish/Subscribe
  * 
  * Dependencies: PubSubClient by Nick O'Leary
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <WiBLE.h>

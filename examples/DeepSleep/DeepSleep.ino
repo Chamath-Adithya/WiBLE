@@ -8,6 +8,7 @@
  * 2. Check if provisioned
  * 3. If YES: Connect WiFi, Do Task, Sleep
  * 4. If NO: Start BLE Provisioning, Wait for user, Then Sleep
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <WiBLE.h>
@@ -16,8 +17,10 @@ using namespace WiBLE;
 
 WiBLE::WiBLE provisioner;
 
-#define uS_TO_S_FACTOR 1000000ULL  /* Conversion factor for micro seconds to seconds */
-#define TIME_TO_SLEEP  10          /* Time ESP32 will go to sleep (in seconds) */
+#define uS_TO_S_FACTOR 1000000ULL  /* Conversion factor for micro seconds to seconds * @author Chamath Adithya (SOLVEO)
+ */
+#define TIME_TO_SLEEP  10          /* Time ESP32 will go to sleep (in seconds) * @author Chamath Adithya (SOLVEO)
+ */
 
 void setup() {
     Serial.begin(115200);

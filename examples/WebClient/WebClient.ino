@@ -7,6 +7,7 @@
  * 1. Flash this sketch to your ESP32.
  * 2. Open the 'index.html' file in this directory using a Chrome/Edge browser.
  * 3. Click "Connect" in the web page to provision this device.
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <WiBLE.h>

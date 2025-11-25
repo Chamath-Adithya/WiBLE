@@ -9,6 +9,7 @@
  * 3. Connects to the Sensor Device and reads a characteristic.
  * 
  * Note: This uses the native ESP32 BLE API for the Client role, co-existing with WiBLE.
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <WiBLE.h>

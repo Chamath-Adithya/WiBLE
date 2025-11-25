@@ -7,6 +7,7 @@
  * 1. Device advertises "OTA Service".
  * 2. Mobile app connects and writes firmware chunks to "OTA Characteristic".
  * 3. Device writes chunks to OTA partition using `Update` library.
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <WiBLE.h>

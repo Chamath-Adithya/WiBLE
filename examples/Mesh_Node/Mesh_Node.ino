@@ -9,6 +9,7 @@
  * 2. Mesh Network Key & App Key (Custom Data)
  * 
  * Once provisioned, the device "joins" the mesh (simulated).
+ * @author Chamath Adithya (SOLVEO)
  */
 
 #include <WiBLE.h>
