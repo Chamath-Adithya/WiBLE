@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 BLE Communication Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: Designed as an interactive, tabbed SPA. This structure (Overview, 4 Methods, Comparison) breaks the complex topic into digestible, non-linear chunks. Users can either follow the learning path (tabs 1-6) or jump directly to a specific method. This is more user-friendly than a linear report. Interactions within each tab (simulated diagrams) directly address the user's request for "images/videos" by visually demonstrating *how* each method works, enhancing understanding. -->
+    <!-- Visualization & Content Choices: Report Info: Core BLE concepts. Goal: Inform. Presentation: HTML/CSS diagrams (divs, flexbox, borders). Interaction: Static. Justification: Clear visual representation of roles. | Report Info: GATT Server (Read/Write/Notify). Goal: Explain data flow. Presentation: Interactive HTML/CSS diagram. Interaction: Buttons (Read, Write, Notify) trigger CSS animations (simulating data flow) and update text. Justification: Dynamically shows the three sub-methods. | Report Info: Advertising. Goal: Show connectionless broadcast. Presentation: HTML/CSS diagram. Interaction: CSS pulse animation. Justification: Visualizes the "one-to-many" broadcast. | Report Info: BLE Mesh. Goal: Show network relay. Presentation: HTML/CSS grid. Interaction: Click a node to trigger a JS-based "propagation" animation. Justification: Simulates the mesh relay concept effectively. | Report Info: Comparison. Goal: Summarize. Presentation: HTML table. Interaction: Hover. Justification: Best for "at-a-glance" comparison. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-tab {
+            @apply px-4 py-2 font-medium text-gray-600 border-b-2 border-transparent cursor-pointer transition-all duration-300;
+        }
+        .nav-tab.active, .nav-tab:hover {
+            @apply text-blue-600 border-blue-600;
+        }
+        .content-section {
+            @apply p-6 bg-white rounded-lg shadow-md;
+        }
+        .hidden {
+            display: none;
+        }
+        .diagram-box {
+            @apply p-4 border-2 border-gray-300 rounded-lg shadow-sm text-center;
+        }
+        .client-box {
+            @apply diagram-box bg-blue-50 border-blue-400;
+        }
+        .server-box {
+            @apply diagram-box bg-green-50 border-green-400;
+        }
+        .data-arrow {
+            @apply text-2xl font-bold text-gray-500 mx-4 opacity-0 transition-all duration-500;
+        }
+        .data-arrow.show {
+            opacity: 1;
+        }
+        .data-arrow.left {
+            transform: translateX(-20px);
+        }
+        .data-arrow.right {
+            transform: translateX(20px);
+        }
+        @keyframes pulse-adv {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .pulse-animation {
+            animation: pulse-adv 2s infinite;
+        }
+        .mesh-node {
+            @apply w-16 h-16 bg-gray-200 border-2 border-gray-400 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300;
+        }
+        .mesh-node.active {
+            @apply bg-blue-500 border-blue-700 text-white scale-110;
+        }
+        .mesh-node.relayed {
+            @apply bg-blue-300 border-blue-500;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4">
+            <h1 class="text-3xl font-bold text-gray-900">ESP32 BLE Communication Explorer</h1>
+            <p class="text-md text-gray-600">An interactive guide to BLE communication methods.</p>
+        </div>
+        <nav class="container mx-auto px-4 flex flex-wrap">
+            <button class="nav-tab active" data-target="overview">Overview & Concepts</button>
+            <button class="nav-tab" data-target="server">Method 1: GATT Server (Peripheral)</button>
+            <button class="nav-tab" data-target="client">Method 2: GATT Client (Central)</button>
+            <button class="nav-tab" data-target="advertising">Method 3: Advertising (Broadcast)</button>
+            <button class="nav-tab" data-target="mesh">Method 4: BLE Mesh</button>
+            <button class="nav-tab" data-target="comparison">Comparison</button>
+        </nav>
+    </header>
+
+    <main id="content-area" class="container mx-auto p-4 my-6">
+
+        <section id="overview" class="content-section space-y-6">
+            <div>
+                <h2 class="text-2xl font-semibold text-blue-700 mb-2">Welcome! What is This?</h2>
+                <p>This application is an interactive guide to help you understand the different ways an ESP32 microcontroller can communicate using Bluetooth Low Energy (BLE). We'll explore the core concepts and the main communication patterns you can implement in your projects. Instead of static images, we'll use simple interactive diagrams to explain the flow of data.</p>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">Key Concept 1: BLE Roles (Central vs. Peripheral)</h3>
+                <p class="mb-4">In any BLE connection, devices play one of two roles:</p>
+                <div class="grid md:grid-cols-2 gap-4 items-center">
+                    <div class="diagram-box bg-blue-50 border-blue-400 p-6">
+                        <h4 class="text-lg font-bold">Central Device</h4>
+                        <p class="text-6xl my-2">💻</p>
+                        <p>(e.g., Phone, PC, or ESP32)</p>
+                        <p class="mt-2 font-medium">The "Client". It scans for other devices and initiates a connection to read or write data.</p>
+                    </div>
+                    <div class="diagram-box bg-green-50 border-green-400 p-6">
+                        <h4 class="text-lg font-bold">Peripheral Device</h4>
+                        <p class="text-6xl my-2">💡</p>
+                        <p>(e.g., Sensor, Lightbulb, or ESP32)</p>
+                        <p class="mt-2 font-medium">The "Server". It advertises its presence and holds data, waiting for a Central to connect.</p>
+                    </div>
+                </div>
+                <p class="mt-4 text-center text-gray-600">An ESP32 is flexible and can act as <span class="font-bold">both</span> a Central and a Peripheral, even simultaneously!</p>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-3">Key Concept 2: The GATT Structure</h3>
+                <p class="mb-4">Once connected, devices use the <span class="font-bold">GATT (Generic Attribute Profile)</span> protocol to exchange data. This has a clear, nested structure for organizing data, much like folders and files.</p>
+                <div class="diagram-box bg-gray-50 p-6 space-y-3">
+                    <div class="diagram-box bg-indigo-100 border-indigo-300">
+                        <h4 class="text-lg font-bold">Profile (GATT)</h4>
+                        <p>The overall set of rules.</p>
+                        <div class="diagram-box bg-indigo-200 border-indigo-400 mt-3">
+                            <h4 class="text-md font-bold">Service</h4>
+                            <p>(e.g., "Heart Rate Service" or "Device Information")</p>
+                            <div class="diagram-box bg-indigo-300 border-indigo-500 mt-3">
+                                <h4 class="text-md font-bold">Characteristic</h4>
+                                <p>(e.g., "Heart Rate Value" or "Battery Level")</p>
+                                <div class="diagram-box bg-white border-indigo-600 mt-3 p-2">
+                                    <h4 class="text-sm font-bold">Value</h4>
+                                    <p class="font-mono text-blue-700">e.g., "72 bpm" or "98%"</p>
+                                </div>
+                                <div class="diagram-box bg-gray-200 border-gray-400 mt-2 p-2">
+                                    <h4 class="text-sm font-bold">Descriptor</h4>
+                                    <p class="text-xs">(e.g., "units: beats per minute")</p>
+                                 </div>
+                            </div>
+                            <div class="diagram-box bg-indigo-300 border-indigo-500 mt-3">
+                                <h4 class="text-md font-bold">Another Characteristic</h4>
+                                <p>(e.g., "Sensor Location")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="server" class="content-section hidden space-y-6">
+            <h2 class="text-2xl font-semibold text-blue-700 mb-2">Method 1: ESP32 as a GATT Server (Peripheral)</h2>
+            <p>This is the most common use case. Your ESP32 acts as a server (like a smart sensor or lightbulb). It holds data that a central device (like your phone) can connect to and interact with. This interaction happens in three main ways: Reading, Writing, and Notifying.</p>
+            <p class="mb-4">Click the buttons in the diagram below to simulate each action.</p>
+            
+            <div class="p-4 bg-gray-50 rounded-lg shadow-inner">
+                <div class="flex flex-col md:flex-row items-center justify-around">
+                    <div class="client-box w-full md:w-1/3">
+                        <h3 class="text-lg font-bold">Phone / PC</h3>
+                        <p class="text-md font-semibold">(GATT Client)</p>
+                        <p class="text-5xl my-2">📱</p>
+                    </div>
+                    
+                    <div class="flex items-center my-4 md:my-0">
+                        <span id="arrow-read" class="data-arrow left">←</span>
+                        <span id="arrow-write" class="data-arrow right">→</span>
+                        <span id="arrow-notify" class="data-arrow left">←</span>
+                    </div>
+
+                    <div class="server-box w-full md:w-1/3">
+                        <h3 class="text-lg font-bold">ESP32</h3>
+                        <p class="text-md font-semibold">(GATT Server)</p>
+                        <p class="text-5xl my-2">⚡</p>
+                        <div class="diagram-box bg-white p-2 mt-2">
+                            <p class="font-bold">Characteristic</p>
+                            <p id="char-value" class="font-mono text-xl text-blue-700">Value: "Hello"</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center my-4 p-3 bg-white rounded-md shadow-sm">
+                    <p id="sim-status" class="text-gray-700 font-medium">Select a simulation to see what happens.</p>
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button id="btn-read" class="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-all">Simulate Read</button>
+                    <button id="btn-write" class="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition-all">Simulate Write</button>
+                    <button id="btn-notify" class="px-4 py-2 bg-purple-500 text-white font-semibold rounded-lg shadow-md hover:bg-purple-600 transition-all">Simulate Notify</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="client" class="content-section hidden space-y-6">
+            <h2 class="text-2xl font-semibold text-blue-700 mb-2">Method 2: ESP32 as a GATT Client (Central)</h2>
+            <p>The ESP32 can also act as the "smart" device, the central. In this role, it scans for peripherals (like fitness trackers, remote sensors, or other ESP32s) and connects to them to gather data. This is useful for creating a central data logger or a gateway to the internet.</p>
+            <p class="mb-4">This diagram shows the process of scanning, discovering, and connecting.</p>
+            
+            <div class="p-4 bg-gray-50 rounded-lg shadow-inner">
+                <div class="flex flex-col md:flex-row items-center justify-around gap-6">
+                    <div id="esp-client" class="client-box w-full md:w-1/3 p-6 text-center">
+                        <h3 class="text-lg font-bold">ESP32</h3>
+                        <p class="text-md font-semibold">(GATT Client)</p>
+                        <p class="text-5xl my-2">⚡</p>
+                        <button id="btn-scan" class="mt-2 px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-all">Start Scan</button>
+                    </div>
+
+                    <div class="w-full md:w-2/3 grid grid-cols-2 gap-4">
+                        <div id="sensor-1" class="server-box p-4 text-center cursor-pointer hover:shadow-lg transition-all">
+                            <p class="text-4xl">❤️</p>
+                            <p class="font-semibold">Heart Rate Sensor</p>
+                        </div>
+                        <div id="sensor-2" class="server-box p-4 text-center cursor-pointer hover:shadow-lg transition-all">
+                            <p class="text-4xl">🌡️</p>
+                            <p class="font-semibold">Weather Station</p>
+                        </div>
+                        <div id="sensor-3" class="server-box p-4 text-center cursor-pointer hover:shadow-lg transition-all">
+                            <p class="text-4xl">💡</p>
+                            <p class="font-semibold">Smart Lightbulb</p>
+                        </div>
+                        <div id="sensor-4" class="server-box p-4 text-center cursor-pointer hover:shadow-lg transition-all">
+                            <p class="text-4xl">🔋</p>
+                            <p class="font-semibold">Battery Monitor</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center my-4 p-3 bg-white rounded-md shadow-sm">
+                    <p id="client-status" class="text-gray-700 font-medium">Click "Start Scan" to find devices.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="advertising" class="content-section hidden space-y-6">
+            <h2 class="text-2xl font-semibold text-blue-700 mb-2">Method 3: Advertising (Connectionless Broadcast)</h2>
+            <p>Sometimes, you don't need a full connection. The ESP32 can use its advertising packets—the same ones it uses to say "I'm here!"—to broadcast small amounts of data. This is a one-way, connectionless method. It's extremely low-power.</p>
+            <p class="mb-4">This is the technology behind <span class="font-bold">Beacons</span> (like iBeacon or Eddystone). The ESP32 just "shouts" its data (e.g., temperature, a URL) and any device (like a phone) within range can simply "listen" without connecting.</p>
+            
+            <div class="p-4 bg-gray-50 rounded-lg shadow-inner min-h-[300px] flex items-center justify-center">
+                <div class="relative flex items-center justify-center">
+                    <div id="broadcaster" class="server-box w-48 h-48 flex flex-col items-center justify-center rounded-full z-10 pulse-animation">
+                        <p class="text-5xl">📡</p>
+                        <p class="font-bold">ESP32</p>
+                        <p class="font-semibold">(Broadcaster)</p>
+                    </div>
+                    
+                    <div class="absolute top-0 -left-20 diagram-box bg-white">
+                        <p class="text-4xl">📱</p>
+                        <p>Phone</p>
+                    </div>
+                    <div class="absolute bottom-0 -left-20 diagram-box bg-white">
+                        <p class="text-4xl">💻</p>
+                        <p>Laptop</p>
+                    </div>
+                    <div class="absolute top-0 -right-20 diagram-box bg-white">
+                        <p class="text-4xl">🏷️</p>
+                        <p>Asset Tag</p>
+                    </div>
+                     <div class="absolute bottom-0 -right-20 diagram-box bg-white">
+                        <p class="text-4xl">🏠</p>
+                        <p>Hub</p>
+                    </div>
+                    
+                    <div class="absolute text-center z-20 bg-blue-100 border border-blue-300 p-2 rounded-lg shadow-lg">
+                        <p class="font-mono">Data: { Temp: 23.5C }</p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-gray-700 font-medium">The ESP32 is constantly broadcasting its data packet to all listeners, which just observe.</p>
+        </section>
+
+        <section id="mesh" class="content-section hidden space-y-6">
+            <h2 class="text-2xl font-semibold text-blue-700 mb-2">Method 4: BLE Mesh</h2>
+            <p>BLE Mesh is a powerful, complex method that creates a many-to-many network. It's different from the other methods. Instead of one-to-one connections, BLE Mesh allows devices (or "nodes") to form a large network, relaying messages for each other.</p>
+            <p class="mb-4">This is ideal for large-scale automation, like controlling all the lights in a building (a "smart lighting" system). A message can "hop" from node to node to reach its destination, extending the range of the network dramatically. Click a node to send a "message".</p>
+
+            <div class="p-4 bg-gray-50 rounded-lg shadow-inner">
+                <div class="grid grid-cols-4 gap-6 p-6">
+                    <div class="mesh-node" data-id="1">Node 1</div>
+                    <div class="mesh-node" data-id="2">Node 2</div>
+                    <div class="mesh-node" data-id="3">Node 3</div>
+                    <div class="mesh-node" data-id="4">Node 4</div>
+                    <div class="mesh-node" data-id="5">Node 5</div>
+                    <div class="mesh-node" data-id="6">Node 6</div>
+                    <div class="mesh-node" data-id="7">Node 7</div>
+                    <div class="mesh-node" data-id="8">Node 8</div>
+                    <div class="mesh-node" data-id="9">Node 9</div>
+                    <div class="mesh-node" data-id="10">Node 10</div>
+                    <div class="mesh-node" data-id="11">Node 11</div>
+                    <div class="mesh-node" data-id="12">Node 12</div>
+                </div>
+                <div class="text-center my-4 p-3 bg-white rounded-md shadow-sm">
+                    <p id="mesh-status" class="text-gray-700 font-medium">Click any node to simulate it sending a message to the network.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparison" class="content-section hidden space-y-6">
+            <h2 class="text-2xl font-semibold text-blue-700 mb-2">Comparison of Methods</h2>
+            <p>Here is a simple breakdown of the methods to help you choose the right one for your project.</p>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-300">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 border-b text-left text-sm font-semibold text-gray-700 uppercase">Method</th>
+                            <th class="px-6 py-3 border-b text-left text-sm font-semibold text-gray-700 uppercase">ESP32 Role</th>
+                            <th class="px-6 py-3 border-b text-left text-sm font-semibold text-gray-700 uppercase">Topology</th>
+                            <th class="px-6 py-3 border-b text-left text-sm font-semibold text-gray-700 uppercase">Common Use</th>
+                            <th class="px-6 py-3 border-b text-left text-sm font-semibold text-gray-700 uppercase">Complexity</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium">GATT Server</td>
+                            <td class="px-6 py-4">Peripheral</td>
+                            <td class="px-6 py-4">1-to-1 (Star)</td>
+                            <td class="px-6 py-4">Sensors, smart devices, being controlled by a phone.</td>
+                            <td class="px-6 py-4">Medium</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium">GATT Client</td>
+                            <td class="px-6 py-4">Central</td>
+                            <td class="px-6 py-4">1-to-Many (Star)</td>
+                            <td class="px-6 py-4">Data logger, gateway, controlling other BLE devices.</td>
+                            <td class="px-6 py-4">Medium-High</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium">Advertising</td>
+                            <td class="px-6 py-4">Broadcaster</td>
+                            <td class="px-6 py-4">1-to-Many (Broadcast)</td>
+                            <td class="px-6 py-4">Beacons, simple sensor data, asset tracking.</td>
+                            <td class="px-6 py-4">Low</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium">BLE Mesh</td>
+                            <td class="px-6 py-4">Node</td>
+                            <td class="px-6 py-4">Many-to-Many (Mesh)</td>
+                            <td class="px-6 py-4">Smart lighting, large building automation, sensor networks.</td>
+                            <td class="px-6 py-4">High</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+    </main>
+
+    <footer class="text-center p-4 mt-6 text-gray-500 text-sm">
+        <p>A simple interactive guide. No real BLE communication is happening.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.nav-tab');
+            const sections = document.querySelectorAll('.content-section');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    const target = tab.getAttribute('data-target');
+                    sections.forEach(s => {
+                        if (s.id === target) {
+                            s.classList.remove('hidden');
+                        } else {
+                            s.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // --- GATT Server Simulation ---
+            const btnRead = document.getElementById('btn-read');
+            const btnWrite = document.getElementById('btn-write');
+            const btnNotify = document.getElementById('btn-notify');
+            const arrowRead = document.getElementById('arrow-read');
+            const arrowWrite = document.getElementById('arrow-write');
+            const arrowNotify = document.getElementById('arrow-notify');
+            const charValue = document.getElementById('char-value');
+            const simStatus = document.getElementById('sim-status');
+
+            function resetArrows() {
+                arrowRead.classList.remove('show', 'left');
+                arrowWrite.classList.remove('show', 'right');
+                arrowNotify.classList.remove('show', 'left');
+                charValue.classList.remove('animate-pulse');
+            }
+
+            btnRead.addEventListener('click', () => {
+                resetArrows();
+                arrowRead.classList.add('show', 'left');
+                simStatus.textContent = 'Client requests to read the value. Server sends "Hello".';
+                charValue.classList.add('animate-pulse');
+            });
+
+            btnWrite.addEventListener('click', () => {
+                resetArrows();
+                arrowWrite.classList.add('show', 'right');
+                simStatus.textContent = 'Client writes a new value "Hi!" to the server.';
+                charValue.textContent = 'Value: "Hi!"';
+                charValue.classList.add('animate-pulse');
+                setTimeout(() => { charValue.textContent = 'Value: "Hello"'; }, 2000);
+            });
+
+            btnNotify.addEventListener('click', () => {
+                resetArrows();
+                arrowNotify.classList.add('show', 'left');
+                simStatus.textContent = 'Server pushes an updated value "Update!" to the client (unprompted).';
+                charValue.textContent = 'Value: "Update!"';
+                charValue.classList.add('animate-pulse');
+                setTimeout(() => { charValue.textContent = 'Value: "Hello"'; }, 2000);
+            });
+            
+            // --- GATT Client Simulation ---
+            const btnScan = document.getElementById('btn-scan');
+            const espClient = document.getElementById('esp-client');
+            const sensors = [
+                document.getElementById('sensor-1'),
+                document.getElementById('sensor-2'),
+                document.getElementById('sensor-3'),
+                document.getElementById('sensor-4')
+            ];
+            const clientStatus = document.getElementById('client-status');
+            
+            btnScan.addEventListener('click', () => {
+                espClient.classList.add('pulse-animation');
+                clientStatus.textContent = 'Scanning for devices...';
+                
+                sensors.forEach(s => s.classList.remove('border-green-600', 'border-4'));
+                
+                setTimeout(() => {
+                    espClient.classList.remove('pulse-animation');
+                    clientStatus.textContent = 'Found 4 devices! Click one to "connect".';
+                }, 1500);
+            });
+            
+            sensors.forEach(sensor => {
+                sensor.addEventListener('click', () => {
+                    sensors.forEach(s => s.classList.remove('border-green-600', 'border-4'));
+                    sensor.classList.add('border-green-600', 'border-4');
+                    clientStatus.textContent = `Connecting to ${sensor.textContent.trim()}...`;
+                    setTimeout(() => {
+                         clientStatus.textContent = `Connected to ${sensor.textContent.trim()}! Ready to read/write.`;
+                    }, 1000);
+                });
+            });
+            
+            // --- BLE Mesh Simulation ---
+            const nodes = document.querySelectorAll('.mesh-node');
+            const meshStatus = document.getElementById('mesh-status');
+            
+            const adjacency = {
+                1: [2, 5], 2: [1, 3, 6], 3: [2, 4, 7], 4: [3, 8],
+                5: [1, 6, 9], 6: [2, 5, 7, 10], 7: [3, 6, 8, 11], 8: [4, 7, 12],
+                9: [5, 10], 10: [6, 9, 11], 11: [7, 10, 12], 12: [8, 11]
+            };
+            
+            nodes.forEach(node => {
+                node.addEventListener('click', () => {
+                    nodes.forEach(n => n.classList.remove('active', 'relayed'));
+                    
+                    const startId = node.getAttribute('data-id');
+                    node.classList.add('active');
+                    meshStatus.textContent = `Node ${startId} is sending a message...`;
+                    
+                    let propagated = new Set([startId]);
+                    let queue = [...(adjacency[startId] || [])];
+                    let depth = 1;
+                    
+                    const propagate = () => {
+                        if (queue.length === 0) {
+                            meshStatus.textContent = 'Message delivered to all reachable nodes.';
+                            return;
+                        }
+                        
+                        let levelSize = queue.length;
+                        let nextQueue = [];
+                        
+                        for(let i=0; i < levelSize; i++) {
+                            let currentId = queue[i];
+                            if (!propagated.has(currentId)) {
+                                propagated.add(currentId);
+                                document.querySelector(`.mesh-node[data-id="${currentId}"]`).classList.add('relayed');
+                                
+                                (adjacency[currentId] || []).forEach(neighbor => {
+                                    if (!propagated.has(neighbor)) {
+                                        nextQueue.push(neighbor);
+                                    }
+                                });
+                            }
+                        }
+                        queue = [...new Set(nextQueue)];
+                        depth++;
+                        
+                        if (queue.length > 0) {
+                            setTimeout(propagate, 400);
+                        } else {
+                             meshStatus.textContent = 'Message propagation complete.';
+                             setTimeout(() => {
+                                meshStatus.textContent = 'Click any node to simulate it sending a message to the network.';
+                             }, 2000);
+                        }
+                    };
+                    
+                    setTimeout(propagate, 400);
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>

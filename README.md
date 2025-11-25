@@ -143,6 +143,8 @@ Application Layer (Your Code)
     ↓
 Core Services Layer (State Machine, Security, Orchestration)
     ↓
+    Provisioning Orchestrator (Coordinates BLE & WiFi)
+    ↓
 Protocol Layer (BLE Manager, WiFi Manager)
     ↓
 Platform Abstraction Layer (ESP32 APIs)
@@ -191,29 +193,11 @@ Simple example showing minimal setup:
 examples/BasicProvisioning/BasicProvisioning.ino
 ```
 
-### Secure Provisioning
-Advanced security with PIN authentication:
-```cpp
-examples/SecureProvisioning/SecureProvisioning.ino
-```
-
-### Multi-Device
-Provision multiple devices simultaneously:
-```cpp
-examples/MultiDevice/MultiDevice.ino
-```
-
-### Custom Protocol
-Extend provisioning with custom data:
-```cpp
-examples/CustomProtocol/CustomProtocol.ino
-```
-
-### Background Operation
-Long-running provisioning with power management:
-```cpp
-examples/BackgroundOperation/BackgroundOperation.ino
-```
+### More Examples (Coming Soon)
+- **Secure Provisioning**: Advanced security with PIN authentication
+- **Multi-Device**: Provision multiple devices simultaneously
+- **Custom Protocol**: Extend provisioning with custom data
+- **Background Operation**: Long-running provisioning with power management
 
 ---
 
