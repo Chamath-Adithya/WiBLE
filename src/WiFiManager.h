@@ -147,8 +147,8 @@ struct ConnectionResult {
 // CALLBACKS
 // ============================================================================
 
-using WiFiConnectedCallback = std::function<void(const ConnectionInfo& info)>;
-using WiFiDisconnectedCallback = std::function<void(WiFiDisconnectReason reason, String message)>;
+using WiFiMgrConnectedCallback = std::function<void(const ConnectionInfo& info)>;
+using WiFiMgrDisconnectedCallback = std::function<void(WiFiDisconnectReason reason, String message)>;
 using WiFiScanCompleteCallback = std::function<void(const std::vector<NetworkInfo>& networks)>;
 using WiFiIPAcquiredCallback = std::function<void(String ipAddress)>;
 using WiFiConnectionProgressCallback = std::function<void(uint8_t progress, String status)>;
@@ -439,8 +439,8 @@ public:
     // CALLBACKS
     // ========================================================================
     
-    void onConnected(WiFiConnectedCallback callback);
-    void onDisconnected(WiFiDisconnectedCallback callback);
+    void onConnected(WiFiMgrConnectedCallback callback);
+    void onDisconnected(WiFiMgrDisconnectedCallback callback);
     void onScanComplete(WiFiScanCompleteCallback callback);
     void onIPAcquired(WiFiIPAcquiredCallback callback);
     void onConnectionProgress(WiFiConnectionProgressCallback callback);
