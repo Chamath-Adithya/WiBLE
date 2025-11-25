@@ -5,7 +5,7 @@
  * for ESP32/ESP32-C6 IoT devices.
  * 
  * @version 2.0.0
- * @author WiBLE Development Team
+ * @author Chamath Adithya (SOLVEO)
  * @license MIT
  */
 
