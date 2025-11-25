@@ -253,9 +253,9 @@ void WiBLE::setLogLevel(LogLevel level) {}
 void WiBLE::enableSerialLogging(bool enabled) {}
 void WiBLE::log(LogLevel level, const String& message) { LogManager::log(level, message); }
 void WiBLE::dumpState() const { if (stateManager) stateManager->dumpStateMachine(); }
-bool WiBLE::enableOTA(const String& otaUrl) { return false; }
-void WiBLE::sendTelemetry(const String& data) {}
-void WiBLE::setCustomData(const String& key, const String& value) {}
-String WiBLE::getCustomData(const String& key) const { return ""; }
+bool WiBLE::enableOTA(const ::String& otaUrl) { return false; }
+void WiBLE::sendTelemetry(const ::String& data) {}
+void WiBLE::setCustomData(const ::String& key, const ::String& value) {}
+::String WiBLE::getCustomData(const ::String& key) const { return ""; }
 
 } // namespace WiBLE
