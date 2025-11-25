@@ -63,6 +63,23 @@ WiBLE is a next-generation provisioning framework that seamlessly combines **Blu
 
 ---
 
+## 📦 Partition Scheme (Critical!)
+
+**WiBLE requires a larger app partition than the default.**
+The combined size of the WiFi stack, BLE stack (Bluedroid), and security libraries exceeds the standard 1.3MB app partition.
+
+### Arduino IDE
+1. Go to **Tools > Partition Scheme**.
+2. Select **"Huge APP (3MB No OTA/1MB SPIFFS)"** or **"Minimal SPIFFS (1.9MB APP with OTA)"**.
+
+### PlatformIO
+Add this to your `platformio.ini`:
+```ini
+board_build.partitions = huge_app.csv
+; OR for OTA support:
+; board_build.partitions = min_spiffs.csv
+```
+
 ## 🚀 Quick Start
 
 ### 1. Installation
