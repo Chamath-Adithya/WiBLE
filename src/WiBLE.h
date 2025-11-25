@@ -347,8 +347,8 @@ private:
     std::unique_ptr<WiFiManager> wifiManager;
     std::unique_ptr<SecurityManager> securityManager;
     std::unique_ptr<StateManager> stateManager;
-    std::unique_ptr<ProvisioningOrchestrator> orchestrator;
-    std::unique_ptr<StorageManager> storageManager;
+    // std::unique_ptr<ProvisioningOrchestrator> orchestrator;
+    // std::unique_ptr<StorageManager> storageManager;
     std::unique_ptr<LogManager> logManager;
     
     // Configuration
