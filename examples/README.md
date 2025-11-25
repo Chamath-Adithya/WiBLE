@@ -31,6 +31,7 @@ This directory contains a comprehensive set of examples demonstrating how to use
 
 | Example | Description | Integration |
 | :--- | :--- | :--- |
+| **[SensorDashboard](SensorDashboard/SensorDashboard.ino)** | Bidirectional data: 4 sensors → app, 2 LEDs ← app. | Custom Protocol (see PROTOCOL.md) |
 | **[MQTT_Client](MQTT_Client/MQTT_Client.ino)** | Full IoT flow: Provision -> WiFi -> MQTT. | `PubSubClient` |
 | **[AWS_IoT](AWS_IoT/AWS_IoT.ino)** | Secure Cloud connectivity. | AWS IoT Core, Certificates |
 | **[OTA_Update](OTA_Update/OTA_Update.ino)** | Wireless Firmware Update. | `Update` library |
