@@ -16,7 +16,20 @@
 // INCLUDES
 // ============================================================================
 #include <Arduino.h>
+#include <memory>
+#include <vector>
+#include <functional>
 #include "WiBLE_Defs.h"
+
+namespace WiBLE {
+
+class BLEManager;
+class WiFiManager;
+class SecurityManager;
+class StateManager;
+class ProvisioningOrchestrator;
+class StorageManager;
+class LogManager;
 
 // ============================================================================
 // DATA STRUCTURES
