@@ -66,9 +66,32 @@ bool WiBLE::begin(const ProvisioningConfig& config) {
     }
     
     // Initialize other components
-    if (bleManager) bleManager->initialize(BLEConfig()); // Use default config for now
-    if (securityManager) securityManager->initialize(SecurityConfig());
-    if (wifiManager) wifiManager->initialize(WiFiConfig());
+    if (bleManager) {
+        BLEConfig bleConfig;
+        bleConfig.deviceName = config.deviceName;
+        bleConfig.mtuSize = config.mtuSize;
+        bleConfig.connectionInterval = config.connectionInterval;
+        bleConfig.enableBonding = config.enableBonding;
+        bleManager->initialize(bleConfig);
+    }
+    
+    if (securityManager) {
+        SecurityConfig secConfig;
+        secConfig.level = config.securityLevel;
+        secConfig.pinCode = config.pinCode;
+        secConfig.authTimeoutMs = config.authTimeoutMs;
+        securityManager->initialize(secConfig);
+    }
+    
+    if (wifiManager) {
+        WiFiConfig wifiConfig;
+        wifiConfig.connectionTimeoutMs = config.wifiConnectTimeoutMs;
+        wifiConfig.maxConnectionRetries = config.wifiMaxRetries;
+        wifiConfig.retryDelayMs = config.wifiRetryDelayMs;
+        wifiConfig.autoReconnect = config.autoReconnect;
+        wifiConfig.persistCredentials = config.persistCredentials;
+        wifiManager->initialize(wifiConfig);
+    }
     if (orchestrator) orchestrator->initialize();
     
     initialized = true;

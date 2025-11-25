@@ -16,7 +16,9 @@
  */
 
 #include <Arduino.h>
+#include <Arduino.h>
 #include "WiBLE.h"
+#include "StateManager.h" // For StateUtils
 
 using namespace WiBLE;
 
@@ -119,7 +121,9 @@ void onAuthentication(bool success, String clientAddress) {
 void onCredentialsReceived(const WiFiCredentials& credentials) {
     Serial.println("📥 WiFi credentials received:");
     Serial.printf("   SSID: %s\n", credentials.ssid.c_str());
-    Serial.printf("   Password: %s\n", String("*").c_str() * credentials.password.length());
+    String maskedPass = "";
+    for(int i=0; i<credentials.password.length(); i++) maskedPass += "*";
+    Serial.printf("   Password: %s\n", maskedPass.c_str());
     Serial.printf("   Security: %s\n", credentials.securityType.c_str());
 }
 
@@ -133,9 +137,9 @@ void onWiFiConnected(String ssid, String ipAddress) {
 void onWiFiDisconnected(String reason) {
     Serial.printf("✗ WiFi disconnected: %s\n", reason.c_str());
     
-    if (provisioner.isAutoReconnectEnabled()) {
-        Serial.println("   Auto-reconnect enabled, will retry...");
-    }
+    // if (provisioner.isAutoReconnectEnabled()) {
+    //     Serial.println("   Auto-reconnect enabled, will retry...");
+    // }
 }
 
 void onProvisioningComplete(bool success, uint32_t durationMs) {
@@ -288,9 +292,9 @@ void setup() {
         }
     }
     
-    Serial.println("\n" + String("=").c_str() * 50);
+    Serial.println("\n==================================================");
     Serial.println("Setup complete. Entering main loop...");
-    Serial.println(String("=").c_str() * 50 + "\n");
+    Serial.println("==================================================\n");
 }
 
 // ============================================================================
