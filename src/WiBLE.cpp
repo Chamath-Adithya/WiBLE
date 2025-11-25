@@ -7,6 +7,7 @@
 #include "WiFiManager.h"
 #include "SecurityManager.h"
 #include "StateManager.h"
+#include "ProvisioningOrchestrator.h"
 #include "utils/LogManager.h"
 
 namespace WiBLE {
@@ -21,10 +22,20 @@ WiBLE::WiBLE() : initialized(false), startTime(0) {
     // For Phase 1, we focus on StateManager.
     stateManager = std::unique_ptr<StateManager>(new StateManager());
     
-    // Placeholder for other managers
-    // bleManager = std::unique_ptr<BLEManager>(new BLEManager());
-    // wifiManager = std::unique_ptr<WiFiManager>(new WiFiManager());
-    // securityManager = std::unique_ptr<SecurityManager>(new SecurityManager());
+    // Initialize Managers
+    bleManager = std::unique_ptr<BLEManager>(new BLEManager());
+    wifiManager = std::unique_ptr<WiFiManager>(new WiFiManager());
+    securityManager = std::unique_ptr<SecurityManager>(new SecurityManager());
+    
+    // Initialize Orchestrator with references to managers
+    orchestrator = std::unique_ptr<ProvisioningOrchestrator>(
+        new ProvisioningOrchestrator(
+            stateManager.get(),
+            bleManager.get(),
+            wifiManager.get(),
+            securityManager.get()
+        )
+    );
 }
 
 WiBLE::~WiBLE() {
@@ -54,12 +65,11 @@ bool WiBLE::begin(const ProvisioningConfig& config) {
         });
     }
     
-    // Initialize other components (Placeholders for Phase 1)
-    /*
-    if (bleManager) bleManager->initialize();
-    if (securityManager) securityManager->initialize();
-    if (wifiManager) wifiManager->initialize();
-    */
+    // Initialize other components
+    if (bleManager) bleManager->initialize(BLEConfig()); // Use default config for now
+    if (securityManager) securityManager->initialize(SecurityConfig());
+    if (wifiManager) wifiManager->initialize(WiFiConfig());
+    if (orchestrator) orchestrator->initialize();
     
     initialized = true;
     startTime = millis();
