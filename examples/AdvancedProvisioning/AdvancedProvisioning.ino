@@ -67,11 +67,15 @@ void setup() {
         while(1);
     }
 
-    // 4. Set Custom Data (e.g., Device Serial Number)
-    // This can be read by the app
-    // provisioner.setCustomData("serial", "SN-99887766");
+    // 4. Set Custom Data (Example: Device Serial Number)
+    // This data is readable by the mobile app before provisioning
+    // allowing the app to identify specific device variants.
+    // provisioner.setCustomData("serial", "SN-99887766"); // API not yet in WiBLE.h, using sendBLEData in callback instead
+    
+    // Note: To send initial data, we can use the callback when connected
     
     Serial.println("Setup Complete. Waiting for interaction...");
+    Serial.println("Security: PIN Code '123456' required for bonding.");
 }
 
 void loop() {

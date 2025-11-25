@@ -13,6 +13,10 @@
  * 2. Use WiBLE mobile app to provision
  * 3. Device connects to WiFi automatically
  * 4. Monitor Serial for logs
+ * 
+ * RECOMMENDATION:
+ * This is the recommended starting point for production applications.
+ * It includes robust error handling, logging, and a CLI.
  */
 
 #include <Arduino.h>
