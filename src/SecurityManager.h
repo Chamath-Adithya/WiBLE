@@ -16,18 +16,13 @@
 #include <mbedtls/sha256.h>
 #include <vector>
 
+#include "WiBLE_Defs.h"
+
 namespace WiBLE {
 
 // ============================================================================
 // SECURITY ENUMS
 // ============================================================================
-
-enum class SecurityLevel {
-    NONE,
-    BASIC,
-    SECURE,
-    ENTERPRISE
-};
 
 enum class PairingMethod {
     JUST_WORKS,
