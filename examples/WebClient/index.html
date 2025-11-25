@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiBLE Web Provisioner</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: #1f2937;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .status-box {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #e5e7eb;
+            margin-bottom: 1.5rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-primary:disabled {
+            background-color: #93c5fd;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #15803d;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .log-area {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: #1f2937;
+            color: #10b981;
+            font-family: monospace;
+            font-size: 0.8rem;
+            border-radius: 0.5rem;
+            height: 150px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WiBLE Provisioner</h1>
+        
+        <div id="status" class="status-box">
+            Ready to connect
+        </div>
+
+        <div id="connect-section">
+            <button id="btn-connect" class="btn-primary">Connect to Device</button>
+            <p style="text-align: center; font-size: 0.8rem; color: #6b7280;">
+                Make sure your device is powered on and advertising.
+            </p>
+        </div>
+
+        <div id="provision-section" class="hidden">
+            <div class="form-group">
+                <label for="ssid">WiFi Network (SSID)</label>
+                <input type="text" id="ssid" placeholder="Enter WiFi Name">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter WiFi Password">
+            </div>
+
+            <button id="btn-provision" class="btn-success">Provision Device</button>
+            <button id="btn-disconnect" style="background-color: #ef4444; color: white;">Disconnect</button>
+        </div>
+
+        <div class="log-area" id="log"></div>
+    </div>
+
+    <script>
+        // WiBLE Constants
+        const SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
+        const CRED_CHAR_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
+        const STATUS_CHAR_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e";
+
+        // DOM Elements
+        const statusEl = document.getElementById('status');
+        const connectSection = document.getElementById('connect-section');
+        const provisionSection = document.getElementById('provision-section');
+        const btnConnect = document.getElementById('btn-connect');
+        const btnProvision = document.getElementById('btn-provision');
+        const btnDisconnect = document.getElementById('btn-disconnect');
+        const ssidInput = document.getElementById('ssid');
+        const passInput = document.getElementById('password');
+        const logEl = document.getElementById('log');
+
+        // State
+        let device = null;
+        let server = null;
+        let service = null;
+        let credChar = null;
+        let statusChar = null;
+
+        // Logger
+        function log(msg) {
+            const line = document.createElement('div');
+            line.textContent = `> ${msg}`;
+            logEl.appendChild(line);
+            logEl.scrollTop = logEl.scrollHeight;
+            console.log(msg);
+        }
+
+        function setStatus(msg, type = 'normal') {
+            statusEl.textContent = msg;
+            if (type === 'error') statusEl.style.color = 'red';
+            else if (type === 'success') statusEl.style.color = 'green';
+            else statusEl.style.color = 'black';
+        }
+
+        // Connect
+        btnConnect.addEventListener('click', async () => {
+            try {
+                setStatus("Requesting Bluetooth Device...");
+                log("Requesting Bluetooth Device...");
+                
+                device = await navigator.bluetooth.requestDevice({
+                    filters: [{ services: [SERVICE_UUID] }],
+                    optionalServices: [SERVICE_UUID]
+                });
+
+                device.addEventListener('gattserverdisconnected', onDisconnected);
+
+                setStatus("Connecting to GATT Server...");
+                log("Connecting to GATT Server...");
+                server = await device.gatt.connect();
+
+                setStatus("Getting Service...");
+                log("Getting Service...");
+                service = await server.getPrimaryService(SERVICE_UUID);
+
+                setStatus("Getting Characteristics...");
+                log("Getting Characteristics...");
+                credChar = await service.getCharacteristic(CRED_CHAR_UUID);
+                statusChar = await service.getCharacteristic(STATUS_CHAR_UUID);
+
+                // Subscribe to notifications
+                await statusChar.startNotifications();
+                statusChar.addEventListener('characteristicvaluechanged', handleStatusChange);
+                log("Subscribed to status notifications");
+
+                // Update UI
+                connectSection.classList.add('hidden');
+                provisionSection.classList.remove('hidden');
+                setStatus("Connected! Enter WiFi credentials.", "success");
+                log("Connected successfully");
+
+            } catch (error) {
+                log("Error: " + error);
+                setStatus("Connection failed: " + error, "error");
+            }
+        });
+
+        // Provision
+        btnProvision.addEventListener('click', async () => {
+            const ssid = ssidInput.value;
+            const password = passInput.value;
+
+            if (!ssid) {
+                alert("Please enter a WiFi SSID");
+                return;
+            }
+
+            try {
+                setStatus("Sending credentials...");
+                log(`Sending credentials for SSID: ${ssid}`);
+
+                const payload = JSON.stringify({ ssid, pass: password });
+                const encoder = new TextEncoder();
+                await credChar.writeValue(encoder.encode(payload));
+
+                setStatus("Credentials sent! Waiting for connection...", "success");
+                log("Credentials written to characteristic");
+
+            } catch (error) {
+                log("Provisioning Error: " + error);
+                setStatus("Provisioning failed", "error");
+            }
+        });
+
+        // Disconnect
+        btnDisconnect.addEventListener('click', () => {
+            if (device && device.gatt.connected) {
+                device.gatt.disconnect();
+            }
+        });
+
+        function onDisconnected() {
+            log("Device Disconnected");
+            setStatus("Disconnected");
+            connectSection.classList.remove('hidden');
+            provisionSection.classList.add('hidden');
+            device = null;
+        }
+
+        function handleStatusChange(event) {
+            const value = event.target.value;
+            // Decode status if needed, for now just logging raw bytes
+            const statusByte = value.getUint8(0);
+            log(`Status Update Received: ${statusByte}`);
+            
+            if (statusByte === 1) setStatus("Device Connecting to WiFi...");
+            if (statusByte === 2) setStatus("Device Provisioned Successfully!", "success");
+            if (statusByte === 3) setStatus("Device Error!", "error");
+        }
+    </script>
+</body>
+</html>
