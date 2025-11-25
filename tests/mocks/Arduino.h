@@ -28,6 +28,16 @@ public:
     String operator+(const char* other) const {
         return String(std::string(*this) + std::string(other));
     }
+    
+    int indexOf(const char* str, int fromIndex = 0) const {
+        size_t pos = std::string::find(str, fromIndex);
+        return (pos == std::string::npos) ? -1 : (int)pos;
+    }
+    
+    String substring(int from, int to = -1) const {
+        if (to == -1) return String(std::string::substr(from));
+        return String(std::string::substr(from, to - from));
+    }
 };
 
 // Mock time functions
