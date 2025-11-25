@@ -1,0 +1,57 @@
+#######################################
+# Syntax Coloring Map for WiBLE
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+WiBLE	KEYWORD1
+ProvisioningConfig	KEYWORD1
+ProvisioningState	KEYWORD1
+SecurityLevel	KEYWORD1
+ErrorCode	KEYWORD1
+WiFiCredentials	KEYWORD1
+DeviceInfo	KEYWORD1
+ProvisioningMetrics	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+loop	KEYWORD2
+startProvisioning	KEYWORD2
+stopProvisioning	KEYWORD2
+isProvisioned	KEYWORD2
+isConnected	KEYWORD2
+isWiFiConnected	KEYWORD2
+isBLEConnected	KEYWORD2
+getDeviceInfo	KEYWORD2
+getMetrics	KEYWORD2
+reset	KEYWORD2
+clearProvisioning	KEYWORD2
+dumpState	KEYWORD2
+scanForDevices	KEYWORD2
+startBeaconMode	KEYWORD2
+startBroadcasting	KEYWORD2
+setCustomData	KEYWORD2
+sendBLEData	KEYWORD2
+sendWiFiData	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+NONE	LITERAL1
+BASIC	LITERAL1
+SECURE	LITERAL1
+ENTERPRISE	LITERAL1
+IDLE	LITERAL1
+BLE_ADVERTISING	LITERAL1
+BLE_CONNECTED	LITERAL1
+AUTHENTICATING	LITERAL1
+RECEIVING_CREDENTIALS	LITERAL1
+CONNECTING_WIFI	LITERAL1
+PROVISIONED	LITERAL1
+ERROR	LITERAL1
