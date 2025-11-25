@@ -14,7 +14,6 @@ namespace WiBLE {
 
 WiFiManager::WiFiManager() 
     : initialized(false), 
-      autoReconnect(true),
       isScanning(false) {
 }
 

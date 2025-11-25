@@ -34,7 +34,7 @@ public:
     int status() { return WL_CONNECTED; }
     void disconnect(bool wifioff = false) {}
     
-    void scanNetworks(bool async) {}
+    int16_t scanNetworks(bool async) { return 1; }
     int16_t scanComplete() { return 1; }
     void scanDelete() {}
     
