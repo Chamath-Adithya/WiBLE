@@ -91,11 +91,11 @@ platform = espressif32
 board = esp32dev
 framework = arduino
 lib_deps = 
-    yourorg/WiBLE@^2.0.0
+    Chamath-Adithya/WiBLE@^2.0.0
 ```
 
 #### Arduino IDE
-1. Download latest release from [GitHub Releases](https://github.com/yourorg/wible/releases)
+1. Download latest release from [GitHub Releases](https://github.com/Chamath-Adithya/WiBLE/releases)
 2. Extract to `Arduino/libraries/WiBLE/`
 3. Restart Arduino IDE
 
@@ -371,7 +371,7 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ```bash
 # Clone repository
-git clone https://github.com/yourorg/wible.git
+git clone https://github.com/Chamath-Adithya/WiBLE.git
 cd wible
 
 # Install dependencies
@@ -419,10 +419,10 @@ Built on insights from:
 
 ## 📞 Support
 
-- 📧 Email: support@wible.dev
+- 📧 Email: achamth1@gmail.com
 - 💬 Discord: [Join our community](https://discord.gg/wible)
-- 🐛 Issues: [GitHub Issues](https://github.com/yourorg/wible/issues)
-- 📖 Docs: [Full Documentation](https://wible.dev/docs)
+- 🐛 Issues: [GitHub Issues](https://github.com/Chamath-Adithya/WiBLE/issues)
+- 📖 GitHub: [WiBLE Repository](https://github.com/Chamath-Adithya/WiBLE)
 
 ---
 
@@ -450,19 +450,13 @@ Built on insights from:
 
 ## 📈 Statistics
 
-![GitHub Stars](https://img.shields.io/github/stars/yourorg/wible?style=social)
-![Downloads](https://img.shields.io/github/downloads/yourorg/wible/total)
-![License](https://img.shields.io/github/license/yourorg/wible)
-![Build Status](https://img.shields.io/github/actions/workflow/status/yourorg/wible/ci.yml)
+![GitHub Stars](https://img.shields.io/github/stars/Chamath-Adithya/WiBLE?style=social)
+![Downloads](https://img.shields.io/github/downloads/Chamath-Adithya/WiBLE/total)
+![License](https://img.shields.io/github/license/Chamath-Adithya/WiBLE)
+![Build Status](https://img.shields.io/github/actions/workflow/status/Chamath-Adithya/WiBLE/ci.yml)
 
 ---
 
 <p align="center">
-  Made with ❤️ by the WiBLE Team
-</p>
-
-<p align="center">
-  <a href="https://wible.dev">Website</a> •
-  <a href="https://wible.dev/docs">Documentation</a> •
-  <a href="https://github.com/yourorg/wible">GitHub</a>
+  Built with ❤️ by SOLVEO
 </p>

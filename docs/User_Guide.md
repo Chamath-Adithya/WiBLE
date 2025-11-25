@@ -31,7 +31,7 @@ It turns your ESP32 into a BLE Access Point that a mobile app (or web page) can 
 Add this to your `platformio.ini`:
 ```ini
 lib_deps =
-    yourorg/WiBLE @ ^2.0.0
+    Chamath-Adithya/WiBLE @ ^2.0.0
 ```
 
 ### Option B: Arduino IDE
