@@ -6,7 +6,8 @@ This directory contains a comprehensive set of examples demonstrating how to use
 
 | Example | Description | Recommended For |
 | :--- | :--- | :--- |
-| **[BasicProvisioning](BasicProvisioning/BasicProvisioning.ino)** | A complete, production-ready template with logging, CLI, and error handling. | **Start Here!** Use this as the base for your commercial product. |
+| **[SimplestProvisioning](SimplestProvisioning/SimplestProvisioning.ino)** | The absolute minimum - just 20 lines! | **First-time users!** Quick testing and learning. |
+| **[BasicProvisioning](BasicProvisioning/BasicProvisioning.ino)** | A complete, production-ready template with logging, CLI, and error handling. | **Production apps!** Use this as the base for your commercial product. |
 
 ## 🚀 Advanced Features
 
@@ -36,7 +37,8 @@ This directory contains a comprehensive set of examples demonstrating how to use
 
 ## 💡 Which one should I choose?
 
-1.  **Building a Product?** Copy `BasicProvisioning.ino`.
-2.  **Need High Security?** Check `AdvancedProvisioning` for PIN pairing and `AWS_IoT` for certs.
-3.  **Battery Powered?** Study `DeepSleep`.
-4.  **No Mobile App?** Use `WebClient`.
+1.  **Just Learning?** Start with `SimplestProvisioning.ino` (20 lines!).
+2.  **Building a Product?** Copy `BasicProvisioning.ino` (production template).
+3.  **Need High Security?** Check `AdvancedProvisioning` for PIN pairing and `AWS_IoT` for certs.
+4.  **Battery Powered?** Study `DeepSleep`.
+5.  **No Mobile App?** Use `WebClient`.
