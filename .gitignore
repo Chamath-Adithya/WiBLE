@@ -1,0 +1,41 @@
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# Arduino IDE
+*.elf
+*.hex
+*.bin
+*.map
+*.o
+*.a
+*.d
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/c_cpp_properties.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# IntelliJ / CLion
+.idea/
+cmake-build-*/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Python (if used for scripts)
+__pycache__/
+*.py[cod]
+venv/
+.env
+
+# WiBLE specific temporary files
+WiBLE_Architecture_
