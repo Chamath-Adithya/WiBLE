@@ -508,8 +508,8 @@ private:
     uint32_t lastConnectionTime;
     
     // Callbacks
-    WiFiConnectedCallback connectedCallback;
-    WiFiDisconnectedCallback disconnectedCallback;
+    WiFiMgrConnectedCallback connectedCallback;
+    WiFiMgrDisconnectedCallback disconnectedCallback;
     WiFiScanCompleteCallback scanCompleteCallback;
     WiFiIPAcquiredCallback ipAcquiredCallback;
     WiFiConnectionProgressCallback progressCallback;

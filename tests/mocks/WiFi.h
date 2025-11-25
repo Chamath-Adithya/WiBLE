@@ -13,6 +13,12 @@
 #define WIFI_AUTH_WPA_WPA2_PSK 4
 #define WIFI_AUTH_WPA2_ENTERPRISE 5
 
+// Mock types
+typedef int wifi_power_t;
+typedef int wifi_ps_type_t;
+typedef int wifi_auth_mode_t;
+typedef int WiFiEvent_t;
+
 class IPAddress {
 public:
     String toString() const { return "192.168.1.100"; }
