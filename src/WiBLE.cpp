@@ -244,6 +244,23 @@ void WiBLE::handleStateTransition(ProvisioningState newState) {
         // In real impl, StateManager passes both
         stateChangeCallback(ProvisioningState::IDLE, newState);
     }
+
+    // Broadcast new state via BLE Advertising
+    if (bleManager && bleManager->isInitialized()) {
+        uint8_t statusByte = 0x00;
+        switch (newState) {
+            case ProvisioningState::IDLE: statusByte = 0x00; break;
+            case ProvisioningState::CONNECTING_WIFI: statusByte = 0x01; break;
+            case ProvisioningState::PROVISIONED: statusByte = 0x02; break;
+            case ProvisioningState::ERROR: statusByte = 0x03; break;
+            default: statusByte = 0xFF; break; // Other states
+        }
+        
+        // Company ID 0xFFFF (Test), Data: [Status]
+        if (statusByte != 0xFF) {
+            bleManager->setManufacturerData(0xFFFF, &statusByte, 1);
+        }
+    }
     
     // Handle specific state actions
     switch (newState) {

@@ -189,6 +189,16 @@ public:
      * Update advertising data
      */
     void setAdvertisingData(const std::vector<uint8_t>& manufacturerData);
+
+    /**
+     * Update advertising data with raw bytes
+     */
+    void updateAdvertisingData(uint8_t* data, size_t length);
+
+    /**
+     * Set manufacturer data helper
+     */
+    void setManufacturerData(uint16_t companyId, uint8_t* data, size_t length);
     
     /**
      * Set scan response data
