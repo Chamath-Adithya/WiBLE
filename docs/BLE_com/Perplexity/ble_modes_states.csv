@@ -1,6 +1,0 @@
-BLE Mode/State,Device Role,Purpose,Communication Type,Channels Used,Power Consumption,Key Parameters,ESP32 Implementation
-Advertising State,Peripheral/Broadcaster,Broadcast presence and data,Unidirectional (broadcast only),"37, 38, 39 (primary advertising)",Low (periodic transmission),Advertising interval (20ms-10.24s),"BLEAdvertising class, advertising data"
-Scanning State,Central/Observer,Discover nearby devices,Receive only,"37, 38, 39 (listen)",Medium (active listening),"Scan interval, scan window","BLEScan class, scan results"
-Initiating State,Central,Establish connection,Send connection request,"37, 38, 39 (send connection req)",Medium,Connection parameters,BLEClient connect() method
-Connection State,Central & Peripheral,Bidirectional data exchange,Bidirectional (read/write/notify),0-36 (data channels),Variable (depends on activity),"Connection interval, MTU size",BLECharacteristic read/write/notify
-Standby State,Any device,"Idle state, low power",No communication,None,Very Low (sleep),None,Default state

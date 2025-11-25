@@ -1,5 +1,0 @@
-Level,Definition,UUID Type,Example,Properties,ESP32 Server Code,Flutter Client Code
-Profile,Collection of services for specific use case,Not on device (pre-defined collection),"Heart Rate Profile, Battery Service Profile",Defines required services,Not directly implemented,Not directly accessed
-Service,Container for related characteristics,16-bit (SIG) or 128-bit (custom),"Heart Rate Service (0x180D), Battery Service (0x180F)",Groups characteristics,pService = pServer->createService(UUID),device.discoverServices() returns List<BluetoothService>
-Characteristic,Single data value with properties,16-bit (SIG) or 128-bit (custom),"Heart Rate Measurement (0x2A37), Battery Level (0x2A19)","Read, Write, Notify, Indicate","pCharacteristic = pService->createCharacteristic(UUID, properties)",service.characteristics returns List<BluetoothCharacteristic>
-Descriptor,Metadata about characteristic,"16-bit (e.g., 0x2902 for CCCD)",Client Characteristic Config Descriptor (0x2902),Enable notifications/indications,pCharacteristic->addDescriptor(new BLE2902()),characteristic.setNotifyValue(true)
