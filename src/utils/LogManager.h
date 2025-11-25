@@ -41,6 +41,10 @@ public:
     static void debug(const String& message) {
         log(LogLevel::DEBUG, message);
     }
+
+    static void warn(const String& message) {
+        log(LogLevel::WARN, message);
+    }
 };
 
 } // namespace WiBLE

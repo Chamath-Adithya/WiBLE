@@ -13,11 +13,13 @@
 #include <map>
 #include <vector>
 
+#include "WiBLE_Defs.h"
+
 namespace WiBLE {
 
 // Forward declarations
-enum class ProvisioningState;
-enum class ErrorCode;
+// enum class ProvisioningState; // Now in Defs
+// enum class ErrorCode;         // Now in Defs
 
 // ============================================================================
 // STATE EVENTS
