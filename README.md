@@ -423,6 +423,8 @@ pio run -t format
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+Copyright (c) 2025 Chamath Adithya (SOLVEO)
+
 ## 👥 Author
 
 **Chamath Adithya** - *SOLVEO*
