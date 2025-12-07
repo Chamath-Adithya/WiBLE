@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examples - WiBLE</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Fira+Code&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-glow"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.png" alt="WiBLE Logo" height="32"
+                    style="vertical-align: middle; margin-right: 8px;">
+                WiBLE<span class="dot-logo">.</span>
+            </a>
+            <div class="nav-links">
+                <a href="get-started.html">Get Started</a>
+                <a href="documentation.html">Docs</a>
+                <a href="examples.html" class="active">Examples</a>
+                <a href="https://github.com/Chamath-Adithya/WiBLE" class="btn btn-sm glass-btn">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 8rem; padding-bottom: 4rem;">
+        <h1 data-aos="fade-up">Examples</h1>
+        <p class="hero-text" data-aos="fade-up" data-aos-delay="100">Learn by doing. Copy-paste ready code.</p>
+
+        <div class="code-section" style="padding: 2rem 0;">
+            <h2 data-aos="fade-up">1. Basic Provisioning</h2>
+            <p data-aos="fade-up">The simplest way to get started.</p>
+
+            <div class="code-window" style="margin-top: 2rem;" data-aos="fade-up">
+                <div class="window-header">
+                    <span class="filename">BasicProvisioning.ino</span>
+                </div>
+                <pre><code>#include &lt;WiBLE.h&gt;
+
+WiBLE provisioner;
+
+void setup() {
+    Serial.begin(115200);
+    ProvisioningConfig config;
+    config.securityLevel = SecurityLevel::SECURE;
+    provisioner.begin(config);
+    
+    provisioner.onWiFiConnected([](String ssid, String ip) {
+        Serial.printf("Connected to %s (IP: %s)\n", ssid.c_str(), ip.c_str());
+    });
+    
+    provisioner.startProvisioning();
+}
+
+void loop() {
+    provisioner.loop();
+}</code></pre>
+            </div>
+        </div>
+
+        <div class="code-section" style="padding: 2rem 0;">
+            <h2 data-aos="fade-up">2. Custom Data (API Keys)</h2>
+            <p data-aos="fade-up">Send extra data like API keys or User IDs during provisioning.</p>
+
+            <div class="code-window" style="margin-top: 2rem;" data-aos="fade-up">
+                <div class="window-header">
+                    <span class="filename">CustomData.ino</span>
+                </div>
+                <pre><code>// ... setup ...
+
+// Register callback for custom JSON data
+provisioner.onCustomDataReceived([](String data) {
+    // data = {"apiKey": "12345", "userId": "user_01"}
+    Serial.println("Received Config: " + data);
+    
+    // Parse and save to NVS...
+});
+
+// ... loop ...</code></pre>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 WiBLE. Built by <a href="https://github.com/Chamath-Adithya">Chamath Adithya</a>.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

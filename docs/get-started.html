@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started - WiBLE</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Fira+Code&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-glow"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.png" alt="WiBLE Logo" height="32"
+                    style="vertical-align: middle; margin-right: 8px;">
+                WiBLE<span class="dot-logo">.</span>
+            </a>
+            <div class="nav-links">
+                <a href="get-started.html" class="active">Get Started</a>
+                <a href="documentation.html">Docs</a>
+                <a href="examples.html">Examples</a>
+                <a href="https://github.com/Chamath-Adithya/WiBLE" class="btn btn-sm glass-btn">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 8rem; padding-bottom: 4rem;">
+        <h1 data-aos="fade-up">Get Started</h1>
+        <p class="hero-text" data-aos="fade-up" data-aos-delay="100">Follow these steps to integrate WiBLE into your
+            ESP32 project.</p>
+
+        <div class="code-section" style="padding: 2rem 0;">
+            <h2 data-aos="fade-up">1. Installation</h2>
+
+            <div class="split-layout" style="gap: 2rem; margin-top: 2rem;">
+                <div class="feature-card" data-aos="fade-right">
+                    <h3>PlatformIO (Recommended)</h3>
+                    <p>Add the following to your <code>platformio.ini</code> file:</p>
+                    <pre><code>lib_deps = 
+    Chamath-Adithya/WiBLE@^2.0.0</code></pre>
+                </div>
+
+                <div class="feature-card" data-aos="fade-left">
+                    <h3>Arduino IDE</h3>
+                    <p>1. Go to <strong>Sketch > Include Library > Manage Libraries</strong></p>
+                    <p>2. Search for <strong>WiBLE</strong></p>
+                    <p>3. Click <strong>Install</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-section" style="padding: 2rem 0;">
+            <h2 data-aos="fade-up">2. Partition Scheme (Critical!)</h2>
+            <p data-aos="fade-up">WiBLE uses Bluetooth and WiFi stacks, which requires a larger app partition.</p>
+
+            <div class="feature-card" style="margin-top: 2rem;" data-aos="fade-up">
+                <h3>PlatformIO Configuration</h3>
+                <pre><code>board_build.partitions = huge_app.csv
+; OR if you need OTA:
+; board_build.partitions = min_spiffs.csv</code></pre>
+            </div>
+        </div>
+
+        <div class="code-section" style="padding: 2rem 0;">
+            <h2 data-aos="fade-up">3. Hello World</h2>
+            <p data-aos="fade-up">Copy this code into your <code>main.cpp</code> or <code>.ino</code> file:</p>
+
+            <div class="code-window" style="margin-top: 2rem;" data-aos="fade-up">
+                <pre><code>#include &lt;WiBLE.h&gt;
+
+WiBLE provisioner;
+
+void setup() {
+    Serial.begin(115200);
+    
+    ProvisioningConfig config;
+    config.deviceName = "My-ESP32";
+    config.securityLevel = SecurityLevel::SECURE;
+    
+    provisioner.begin(config);
+    provisioner.startProvisioning();
+}
+
+void loop() {
+    provisioner.loop();
+}</code></pre>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 4rem;">
+            <a href="examples.html" class="btn btn-primary glow-effect">Next: View Examples</a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 WiBLE. Built by <a href="https://github.com/Chamath-Adithya">Chamath Adithya</a>.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
