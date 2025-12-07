@@ -591,7 +591,15 @@ h1 {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    border-bottom: 1px solid var(--glass-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    /* Always light text */
+}
+
+.window-header .filename {
+    color: #f1f5f9;
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
 pre {
