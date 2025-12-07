@@ -625,26 +625,32 @@ code {
     overflow-x: auto;
 }
 
-/* Syntax Highlighting */
+/* Syntax Highlighting - Vibrant Colors */
 .code-keyword {
-    color: #60a5fa;
+    color: #38bdf8;
+    /* Bright Sky Blue */
+    font-weight: 600;
 }
 
 .code-string {
-    color: #34d399;
+    color: #4ade80;
+    /* Bright Green */
 }
 
 .code-comment {
-    color: #64748b;
+    color: #94a3b8;
+    /* Light Gray */
     font-style: italic;
 }
 
 .code-function {
-    color: #fbbf24;
+    color: #facc15;
+    /* Bright Yellow */
 }
 
 .code-type {
-    color: #c084fc;
+    color: #e879f9;
+    /* Bright Purple/Pink */
 }
 
 /* Architecture Diagram */
