@@ -59,25 +59,25 @@
                 <div class="window-header">
                     <span class="filename">BasicProvisioning.ino</span>
                 </div>
-                <pre><code>#include &lt;WiBLE.h&gt;
+                <pre><code><span class="code-keyword">#include</span> &lt;<span class="code-type">WiBLE.h</span>&gt;
 
-WiBLE provisioner;
+<span class="code-type">WiBLE</span> provisioner;
 
-void setup() {
-    Serial.begin(115200);
-    ProvisioningConfig config;
-    config.securityLevel = SecurityLevel::SECURE;
-    provisioner.begin(config);
+<span class="code-keyword">void</span> <span class="code-function">setup</span>() {
+    <span class="code-function">Serial.begin</span>(<span class="code-string">115200</span>);
+    <span class="code-type">ProvisioningConfig</span> config;
+    config.securityLevel = <span class="code-type">SecurityLevel</span>::<span class="code-keyword">SECURE</span>;
+    provisioner.<span class="code-function">begin</span>(config);
     
-    provisioner.onWiFiConnected([](String ssid, String ip) {
-        Serial.printf("Connected to %s (IP: %s)\n", ssid.c_str(), ip.c_str());
+    provisioner.<span class="code-function">onWiFiConnected</span>([](<span class="code-type">String</span> ssid, <span class="code-type">String</span> ip) {
+        <span class="code-function">Serial.printf</span>(<span class="code-string">"Connected to %s (IP: %s)\n"</span>, ssid.<span class="code-function">c_str</span>(), ip.<span class="code-function">c_str</span>());
     });
     
-    provisioner.startProvisioning();
+    provisioner.<span class="code-function">startProvisioning</span>();
 }
 
-void loop() {
-    provisioner.loop();
+<span class="code-keyword">void</span> <span class="code-function">loop</span>() {
+    provisioner.<span class="code-function">loop</span>();
 }</code></pre>
             </div>
         </div>
@@ -90,17 +90,17 @@ void loop() {
                 <div class="window-header">
                     <span class="filename">CustomData.ino</span>
                 </div>
-                <pre><code>// ... setup ...
+                <pre><code><span class="code-comment">// ... setup ...</span>
 
-// Register callback for custom JSON data
-provisioner.onCustomDataReceived([](String data) {
-    // data = {"apiKey": "12345", "userId": "user_01"}
-    Serial.println("Received Config: " + data);
+<span class="code-comment">// Register callback for custom JSON data</span>
+provisioner.<span class="code-function">onCustomDataReceived</span>([](<span class="code-type">String</span> data) {
+    <span class="code-comment">// data = {"apiKey": "12345", "userId": "user_01"}</span>
+    <span class="code-function">Serial.println</span>(<span class="code-string">"Received Config: "</span> + data);
     
-    // Parse and save to NVS...
+    <span class="code-comment">// Parse and save to NVS...</span>
 });
 
-// ... loop ...</code></pre>
+<span class="code-comment">// ... loop ...</span></code></pre>
             </div>
         </div>
 
