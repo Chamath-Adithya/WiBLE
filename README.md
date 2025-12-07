@@ -424,6 +424,24 @@ Built on insights from:
 
 ---
 
+---
+
+## ❓ Frequently Asked Questions (FAQ)
+
+### How do I provision an ESP32 using Bluetooth?
+WiBLE makes it easy. Simply include the library, set the security level, and call `provisioner.startProvisioning()`. The device will advertise via BLE, allowing your mobile app to connect and send WiFi credentials securely.
+
+### Is WiBLE secure?
+Yes! WiBLE uses **ECDH (Elliptic Curve Diffie-Hellman)** for key exchange and **AES-256** for encryption. This ensures that your WiFi credentials are never exposed in plain text over the air.
+
+### Does it support ESP32-C3 and ESP32-S3?
+Yes, WiBLE supports all ESP32 variants including ESP32-C3, ESP32-S3, and ESP32-C6, as long as they support Bluetooth Low Energy.
+
+### Can I use this with Arduino IDE?
+Absolutely. WiBLE is fully compatible with the Arduino framework and can be installed via the Library Manager or by downloading the release from GitHub.
+
+---
+
 ## 📞 Support
 
 - 📧 Email: achamth1@gmail.com
