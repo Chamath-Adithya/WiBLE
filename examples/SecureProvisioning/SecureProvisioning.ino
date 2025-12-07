@@ -18,7 +18,7 @@
 using namespace WiBLE;
 
 // Global provisioner instance
-WiBLEProvisioner provisioner;
+WiBLE provisioner;
 
 void setup() {
     Serial.begin(115200);

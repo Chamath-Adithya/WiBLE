@@ -16,7 +16,7 @@
 
 using namespace WiBLE;
 
-WiBLEProvisioner provisioner;
+WiBLE provisioner;
 
 // Structure to hold our custom config
 struct DeviceConfig {
