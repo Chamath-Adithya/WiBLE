@@ -136,5 +136,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Run once to set initial state
         updateCode();
+
+        // Copy to Clipboard Logic
+        const copyButton = document.getElementById('copyButton');
+        if (copyButton) {
+            copyButton.addEventListener('click', () => {
+                // Get raw text content (without HTML tags)
+                const textToCopy = codeBlock.textContent;
+
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalText = copyButton.innerHTML;
+
+                    // Show feedback
+                    copyButton.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Copied!</span>
+                    `;
+                    copyButton.style.background = 'rgba(74, 222, 128, 0.2)';
+                    copyButton.style.borderColor = 'rgba(74, 222, 128, 0.4)';
+                    copyButton.style.color = '#4ade80';
+
+                    setTimeout(() => {
+                        copyButton.innerHTML = originalText;
+                        copyButton.style.background = '';
+                        copyButton.style.borderColor = '';
+                        copyButton.style.color = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            });
+        }
+    }
+
+    // Mobile Menu Logic
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const mobileActions = document.querySelector('.mobile-actions');
+    // const themeToggle = document.getElementById('themeToggle'); // Removed duplicate declaration
+
+    if (hamburger && mobileMenu) {
+        // Clone theme toggle to mobile menu
+        if (themeToggle && mobileActions) {
+            const mobileThemeToggle = themeToggle.cloneNode(true);
+            mobileThemeToggle.id = 'mobileThemeToggle';
+            mobileThemeToggle.addEventListener('click', () => {
+                themeToggle.click(); // Trigger original toggle
+                // Update icon manually for the clone
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                updateThemeIcon(mobileThemeToggle, isDark);
+            });
+            mobileActions.appendChild(mobileThemeToggle);
+
+            // Initial icon state
+            const isDark = localStorage.getItem('theme') === 'dark';
+            updateThemeIcon(mobileThemeToggle, isDark);
+        }
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close menu when clicking a link
+        const mobileLinks = document.querySelectorAll('.mobile-nav-links a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    }
+
+    function updateThemeIcon(btn, isDark) {
+        btn.innerHTML = isDark ?
+            `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>` :
+            `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
     }
 });

@@ -64,6 +64,13 @@
             <a href="index.html" class="logo">
                 WiBLE<span class="dot-logo">.</span>
             </a>
+
+            <button class="hamburger" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <div class="nav-links">
                 <a href="get-started.html">Start</a>
                 <a href="documentation.html">Docs</a>
@@ -81,6 +88,22 @@
                     </svg>
                     GitHub
                 </a>
+            </div>
+
+            <!-- Mobile Menu Overlay -->
+            <div class="mobile-menu">
+                <div class="mobile-nav-links">
+                    <a href="get-started.html">Start</a>
+                    <a href="documentation.html">Docs</a>
+                    <a href="examples.html">Examples</a>
+                    <a href="community.html">Community</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="contact.html">Contact</a>
+                    <div class="mobile-actions">
+                        <!-- Theme toggle will be cloned here via JS -->
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -156,6 +179,14 @@
                         <span class="dot yellow"></span>
                         <span class="dot green"></span>
                         <span class="filename">main.cpp</span>
+                        <button id="copyButton" class="copy-btn" aria-label="Copy Code">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span>Copy</span>
+                        </button>
                     </div>
                     <pre><code id="generatedCode">#include &lt;WiBLE.h&gt;
 
@@ -186,23 +217,23 @@ void loop() {
             <div class="feature-grid">
                 <div class="feature-card tilt-card" data-aos="fade-up" data-aos-delay="0">
                     <div class="card-content">
-                        <div class="icon-box">🔒</div>
+                        <div class="icon-box floating-icon">🛡️</div>
                         <h3>Security First</h3>
                         <p>ECDH key exchange and AES-256 encryption ensure credentials are never exposed.</p>
                     </div>
                 </div>
                 <div class="feature-card tilt-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="card-content">
-                        <div class="icon-box">⚡</div>
+                        <div class="icon-box floating-icon delay-1">⚡</div>
                         <h3>Blazing Fast</h3>
                         <p>Optimized MTU negotiation and state machine logic deliver < 18s provisioning times.</p>
                     </div>
                 </div>
                 <div class="feature-card tilt-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="card-content">
-                        <div class="icon-box">🛡️</div>
-                        <h3>Production Ready</h3>
-                        <p>Built-in auto-reconnect, circuit breakers, and robust error handling for the real world.</p>
+                        <div class="icon-box floating-icon delay-2">🛠️</div>
+                        <h3>Developer Friendly</h3>
+                        <p>Simple API, comprehensive documentation, and ready-to-use examples.</p>
                     </div>
                 </div>
             </div>

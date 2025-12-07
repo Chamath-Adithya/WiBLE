@@ -26,6 +26,13 @@
             <a href="index.html" class="logo">
                 WiBLE<span class="dot-logo">.</span>
             </a>
+
+            <button class="hamburger" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <div class="nav-links">
                 <a href="get-started.html" class="active">Start</a>
                 <a href="documentation.html">Docs</a>
@@ -44,6 +51,22 @@
                     GitHub
                 </a>
             </div>
+
+            <!-- Mobile Menu Overlay -->
+            <div class="mobile-menu">
+                <div class="mobile-nav-links">
+                    <a href="get-started.html" class="active">Start</a>
+                    <a href="documentation.html">Docs</a>
+                    <a href="examples.html">Examples</a>
+                    <a href="community.html">Community</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="contact.html">Contact</a>
+                    <div class="mobile-actions">
+                        <!-- Theme toggle will be cloned here via JS -->
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -53,7 +76,7 @@
             ESP32 project.</p>
 
         <div class="code-section" style="padding: 2rem 0;">
-            <h2 data-aos="fade-up">1. Installation</h2>
+            <h2 data-aos="fade-up"><span class="step-badge">1</span> Installation</h2>
 
             <div class="split-layout" style="gap: 2rem; margin-top: 2rem;">
                 <div class="feature-card" data-aos="fade-right">
@@ -73,7 +96,7 @@
         </div>
 
         <div class="code-section" style="padding: 2rem 0;">
-            <h2 data-aos="fade-up">2. Partition Scheme (Critical!)</h2>
+            <h2 data-aos="fade-up"><span class="step-badge">2</span> Partition Scheme (Critical!)</h2>
             <p data-aos="fade-up">WiBLE uses Bluetooth and WiFi stacks, which requires a larger app partition.</p>
 
             <div class="feature-card" style="margin-top: 2rem;" data-aos="fade-up">
@@ -85,7 +108,7 @@
         </div>
 
         <div class="code-section" style="padding: 2rem 0;">
-            <h2 data-aos="fade-up">3. Hello World</h2>
+            <h2 data-aos="fade-up"><span class="step-badge">3</span> Hello World</h2>
             <p data-aos="fade-up">Copy this code into your <code>main.cpp</code> or <code>.ino</code> file:</p>
 
             <div class="code-window" style="margin-top: 2rem;" data-aos="fade-up">
