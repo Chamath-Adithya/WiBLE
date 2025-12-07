@@ -9,6 +9,13 @@
 </p>
 
 <p align="center">
+    <img src="https://img.shields.io/github/stars/Chamath-Adithya/WiBLE?style=social" alt="GitHub Stars">
+    <img src="https://img.shields.io/github/downloads/Chamath-Adithya/WiBLE/total" alt="Downloads">
+    <img src="https://img.shields.io/github/license/Chamath-Adithya/WiBLE" alt="License">
+    <img src="https://img.shields.io/github/actions/workflow/status/Chamath-Adithya/WiBLE/ci.yml" alt="Build Status">
+</p>
+
+<p align="center">
   <a href="#features">Features</a> •
   <a href="#quick-start">Quick Start</a> •
   <a href="#documentation">Documentation</a> •
@@ -450,10 +457,7 @@ Built on insights from:
 
 ## 📈 Statistics
 
-![GitHub Stars](https://img.shields.io/github/stars/Chamath-Adithya/WiBLE?style=social)
-![Downloads](https://img.shields.io/github/downloads/Chamath-Adithya/WiBLE/total)
-![License](https://img.shields.io/github/license/Chamath-Adithya/WiBLE)
-![Build Status](https://img.shields.io/github/actions/workflow/status/Chamath-Adithya/WiBLE/ci.yml)
+
 
 ---
 

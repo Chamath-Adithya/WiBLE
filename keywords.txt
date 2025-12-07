@@ -14,6 +14,15 @@ ErrorCode	KEYWORD1
 WiFiCredentials	KEYWORD1
 DeviceInfo	KEYWORD1
 ProvisioningMetrics	KEYWORD1
+BLE	KEYWORD1
+WiFi	KEYWORD1
+ESP32	KEYWORD1
+IoT	KEYWORD1
+Provisioning	KEYWORD1
+Security	KEYWORD1
+ECDH	KEYWORD1
+AES	KEYWORD1
+FSM	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)

@@ -39,6 +39,11 @@ If you find a bug or have a feature request, please open an issue on GitHub. Pro
 - Actual behavior
 - Hardware and software versions
 
+## Good First Issues
+
+If you are new to the project, check out the [Good First Issue](https://github.com/Chamath-Adithya/WiBLE/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) label on our issue tracker. These are tasks that are perfect for beginners to get started with WiBLE.
+
+
 ## License
 
 By contributing to WiBLE, you agree that your contributions will be licensed under the MIT License.
