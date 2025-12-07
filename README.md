@@ -401,6 +401,13 @@ pio test -e native
 
 # Format code
 pio run -t format
+
+# Note: If running locally, ensure you have PlatformIO installed.
+# You may need to use a virtual environment if your system manages python packages externally:
+# python3 -m venv venv
+# source venv/bin/activate
+# pip install platformio
+# pio run -e esp32
 ```
 
 ### Code Style
