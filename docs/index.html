@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -17,8 +17,6 @@
     <meta property="og:description"
         content="Stop hardcoding credentials. Start using ECDH + AES-256. The most secure way to connect your IoT devices.">
     <meta property="og:image" content="https://chamath-adithya.github.io/WiBLE/assets/images/og-image.png">
-
-
 
     <!-- Styles -->
     <link rel="stylesheet" href="assets/css/main.css">
@@ -69,6 +67,9 @@
                 <a href="blog.html">Blog</a>
                 <a href="faq.html">FAQ</a>
                 <a href="contact.html">Contact</a>
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
+                    <span>🌙</span>
+                </button>
                 <a href="https://github.com/Chamath-Adithya/WiBLE" class="btn btn-sm glass-btn">
                     <svg height="20" viewBox="0 0 16 16" width="20" fill="currentColor" style="margin-right: 4px">
                         <path
@@ -116,6 +117,61 @@
         </div>
     </header>
 
+    <section id="configurator" class="configurator">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Interactive Configurator</h2>
+            <div class="config-container">
+                <div class="config-panel" data-aos="fade-right">
+                    <div class="config-group">
+                        <label>Device Name</label>
+                        <input type="text" id="configName" class="config-input" value="My-ESP32"
+                            placeholder="e.g. Living-Room-Light">
+                    </div>
+                    <div class="config-group">
+                        <label>Security Level</label>
+                        <select id="configSecurity" class="config-input">
+                            <option value="SECURE">SECURE (ECDH + AES)</option>
+                            <option value="NONE">NONE (Dev Only)</option>
+                        </select>
+                    </div>
+                    <div class="config-group">
+                        <label class="config-toggle">
+                            <input type="checkbox" id="configLogging" checked>
+                            Enable Serial Logging
+                        </label>
+                    </div>
+                </div>
+
+                <div class="code-window" data-aos="fade-left">
+                    <div class="window-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="filename">main.cpp</span>
+                    </div>
+                    <pre><code id="generatedCode">#include &lt;WiBLE.h&gt;
+
+WiBLE provisioner;
+
+void setup() {
+    Serial.begin(115200);
+    
+    ProvisioningConfig config;
+    config.deviceName = "My-ESP32";
+    config.securityLevel = SecurityLevel::SECURE;
+    
+    provisioner.begin(config);
+    provisioner.startProvisioning();
+}
+
+void loop() {
+    provisioner.loop();
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="features" class="features">
         <div class="container">
             <h2 class="section-title" data-aos="fade-up">Why WiBLE?</h2>
@@ -140,48 +196,6 @@
                         <h3>Production Ready</h3>
                         <p>Built-in auto-reconnect, circuit breakers, and robust error handling for the real world.</p>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="code" class="code-section">
-        <div class="container">
-            <div class="split-layout">
-                <div class="text-content" data-aos="fade-right">
-                    <h2>5 Lines of Code.</h2>
-                    <p>WiBLE is designed to be a drop-in solution. Initialize, configure, and start. We handle the
-                        complex BLE/WiFi orchestration for you.</p>
-                    <ul class="check-list">
-                        <li>✅ No boilerplate</li>
-                        <li>✅ Type-safe configuration</li>
-                        <li>✅ Event-driven callbacks</li>
-                    </ul>
-                    <br>
-                    <a href="examples.html" class="btn btn-secondary glass-btn">View All Examples</a>
-                </div>
-                <div class="code-window tilt-card" data-aos="fade-left">
-                    <div class="window-header">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                        <span class="filename">main.cpp</span>
-                    </div>
-                    <pre><code><span class="keyword">#include</span> <span class="string">&lt;WiBLE.h&gt;</span>
-
-<span class="type">WiBLE</span> provisioner;
-
-<span class="keyword">void</span> <span class="function">setup</span>() {
-  <span class="type">ProvisioningConfig</span> config;
-  config.securityLevel = <span class="constant">SecurityLevel::SECURE</span>;
-  
-  provisioner.<span class="function">begin</span>(config);
-  provisioner.<span class="function">startProvisioning</span>();
-}
-
-<span class="keyword">void</span> <span class="function">loop</span>() {
-  provisioner.<span class="function">loop</span>();
-}</code></pre>
                 </div>
             </div>
         </div>

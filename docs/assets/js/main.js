@@ -6,6 +6,32 @@ AOS.init({
     easing: 'ease-out-cubic',
 });
 
+// Theme System
+const themeToggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+const icon = themeToggle ? themeToggle.querySelector('span') : null;
+
+// Check saved preference
+const savedTheme = localStorage.getItem('theme') || 'light';
+html.setAttribute('data-theme', savedTheme);
+updateThemeIcon(savedTheme);
+
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
+    });
+}
+
+function updateThemeIcon(theme) {
+    if (!icon) return;
+    icon.textContent = theme === 'light' ? '🌙' : '☀️';
+}
+
 // Fluid Cursor Logic
 const cursorDot = document.querySelector('.cursor-dot');
 const cursorOutline = document.querySelector('.cursor-outline');
@@ -39,7 +65,7 @@ function animateCursor() {
 animateCursor();
 
 // Magnetic Hover Effect
-const interactiveElements = document.querySelectorAll('a, button, .feature-card, .tilt-card');
+const interactiveElements = document.querySelectorAll('a, button, .feature-card, .tilt-card, input, select');
 
 interactiveElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
@@ -55,7 +81,7 @@ interactiveElements.forEach(el => {
     });
 });
 
-// 3D Tilt Effect (Existing)
+// 3D Tilt Effect
 const cards = document.querySelectorAll('.tilt-card');
 
 cards.forEach(card => {
@@ -81,4 +107,42 @@ function handleMouseMove(e) {
 
 function handleMouseLeave() {
     this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+}
+
+// Interactive Configurator
+const configName = document.getElementById('configName');
+const configSecurity = document.getElementById('configSecurity');
+const configLogging = document.getElementById('configLogging');
+const codeBlock = document.getElementById('generatedCode');
+
+if (configName && configSecurity && configLogging && codeBlock) {
+    function updateCode() {
+        const name = configName.value || 'My-ESP32';
+        const security = configSecurity.value;
+        const logging = configLogging.checked;
+
+        const code = `#include <WiBLE.h>
+
+WiBLE provisioner;
+
+void setup() {
+    ${logging ? 'Serial.begin(115200);' : '// Serial disabled'}
+    
+    ProvisioningConfig config;
+    config.deviceName = "${name}";
+    config.securityLevel = SecurityLevel::${security};
+    
+    provisioner.begin(config);
+    provisioner.startProvisioning();
+}
+
+void loop() {
+    provisioner.loop();
+}`;
+        codeBlock.textContent = code;
+    }
+
+    configName.addEventListener('input', updateCode);
+    configSecurity.addEventListener('change', updateCode);
+    configLogging.addEventListener('change', updateCode);
 }
