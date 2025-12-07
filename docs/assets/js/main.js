@@ -6,6 +6,14 @@ AOS.init({
     easing: 'ease-out-cubic',
 });
 
+// Spotlight Effect
+document.addEventListener('mousemove', (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    document.documentElement.style.setProperty('--cursor-x', x + 'px');
+    document.documentElement.style.setProperty('--cursor-y', y + 'px');
+});
+
 // 3D Tilt Effect
 const cards = document.querySelectorAll('.tilt-card');
 

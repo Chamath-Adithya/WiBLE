@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - WiBLE</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Fira+Code&display=swap"
+        rel="stylesheet">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "Is WiBLE secure?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, WiBLE uses ECDH (Elliptic Curve Diffie-Hellman) for key exchange and AES-256 for encryption, ensuring military-grade security."
+        }
+      }, {
+        "@type": "Question",
+        "name": "Does it support ESP32-C3 and S3?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, WiBLE supports all ESP32 variants including ESP32-C3, ESP32-S3, and ESP32-C6."
+        }
+      }]
+    }
+    </script>
+</head>
+
+<body>
+    <div class="background-glow"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                WiBLE<span class="dot-logo">.</span>
+            </a>
+            <div class="nav-links">
+                <a href="get-started.html">Start</a>
+                <a href="documentation.html">Docs</a>
+                <a href="examples.html">Examples</a>
+                <a href="community.html">Community</a>
+                <a href="blog.html">Blog</a>
+                <a href="faq.html" class="active">FAQ</a>
+                <a href="https://github.com/Chamath-Adithya/WiBLE" class="btn btn-sm glass-btn">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 8rem; padding-bottom: 4rem;">
+        <h1 data-aos="fade-up">FAQ</h1>
+        <p class="hero-text" data-aos="fade-up" data-aos-delay="100">Common questions about ESP32 provisioning.</p>
+
+        <div class="code-section">
+            <div class="feature-card" data-aos="fade-up">
+                <h3>Is WiBLE secure?</h3>
+                <p>Yes! WiBLE uses <strong>ECDH (Elliptic Curve Diffie-Hellman)</strong> for key exchange and
+                    <strong>AES-256</strong> for encryption. This ensures that your WiFi credentials are never exposed
+                    in plain text over the air.</p>
+            </div>
+
+            <div class="feature-card" style="margin-top: 2rem;" data-aos="fade-up">
+                <h3>Does it support ESP32-C3 and S3?</h3>
+                <p>Yes, WiBLE supports all ESP32 variants including ESP32-C3, ESP32-S3, and ESP32-C6, as long as they
+                    support Bluetooth Low Energy.</p>
+            </div>
+
+            <div class="feature-card" style="margin-top: 2rem;" data-aos="fade-up">
+                <h3>Can I use this with Arduino IDE?</h3>
+                <p>Absolutely. WiBLE is fully compatible with the Arduino framework and can be installed via the Library
+                    Manager or by downloading the release from GitHub.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 WiBLE. Built by <a href="https://github.com/Chamath-Adithya">Chamath Adithya</a>.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

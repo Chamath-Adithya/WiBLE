@@ -10,6 +10,10 @@
     --gradient-end: #a78bfa;
     --glass-bg: rgba(30, 41, 59, 0.7);
     --glass-border: rgba(255, 255, 255, 0.05);
+
+    /* Spotlight Variables */
+    --cursor-x: 50%;
+    --cursor-y: 50%;
 }
 
 * {
@@ -24,9 +28,25 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     overflow-x: hidden;
+    cursor: default;
 }
 
-/* Background Glow */
+/* Spotlight Effect */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(600px circle at var(--cursor-x) var(--cursor-y),
+            rgba(59, 130, 246, 0.15),
+            transparent 40%);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+/* Background Glow (Static) */
 .background-glow {
     position: fixed;
     top: 0;
@@ -64,16 +84,37 @@ body {
     align-items: center;
 }
 
+/* 3D Logo */
 .logo {
-    font-size: 1.5rem;
-    font-weight: 800;
+    font-size: 1.75rem;
+    font-weight: 900;
     color: var(--text-color);
     text-decoration: none;
     letter-spacing: -0.05em;
+    position: relative;
+    text-shadow:
+        0 1px 0 #ccc,
+        0 2px 0 #c9c9c9,
+        0 3px 0 #bbb,
+        0 4px 0 #b9b9b9,
+        0 5px 0 #aaa,
+        0 6px 1px rgba(0, 0, 0, .1),
+        0 0 5px rgba(0, 0, 0, .1),
+        0 1px 3px rgba(0, 0, 0, .3),
+        0 3px 5px rgba(0, 0, 0, .2),
+        0 5px 10px rgba(0, 0, 0, .25),
+        0 10px 10px rgba(0, 0, 0, .2),
+        0 20px 20px rgba(0, 0, 0, .15);
+    transition: transform 0.2s;
+}
+
+.logo:hover {
+    transform: translateY(-2px);
 }
 
 .dot-logo {
     color: var(--primary-color);
+    text-shadow: none;
 }
 
 .nav-links {
@@ -88,10 +129,23 @@ body {
     font-weight: 600;
     transition: color 0.2s;
     font-size: 0.9rem;
+    position: relative;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a.active {
     color: var(--text-color);
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--primary-color);
+    border-radius: 2px;
 }
 
 /* Buttons */
