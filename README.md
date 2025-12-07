@@ -162,18 +162,27 @@ void loop() {
 
 WiBLE uses a **five-layer architecture** for maximum flexibility:
 
-```
-Application Layer (Your Code)
-    ↓
-Core Services Layer (State Machine, Security, Orchestration)
-    ↓
-    Provisioning Orchestrator (Coordinates BLE & WiFi)
-    ↓
-Protocol Layer (BLE Manager, WiFi Manager)
-    ↓
-Platform Abstraction Layer (ESP32 APIs)
-    ↓
-Cross-Cutting Concerns (Logging, Metrics, Config)
+```mermaid
+graph TD
+    App[Application Layer (Your Code)] --> Core[Core Services Layer]
+    
+    subgraph Core [Core Services Layer]
+        State[State Machine]
+        Sec[Security Manager]
+        Orch[Provisioning Orchestrator]
+    end
+    
+    Core --> Proto[Protocol Layer]
+    
+    subgraph Proto [Protocol Layer]
+        BLE[BLE Manager]
+        WiFi[WiFi Manager]
+    end
+    
+    Proto --> HAL[Platform Abstraction Layer (ESP32 APIs)]
+    
+    Cross[Cross-Cutting Concerns] -.-> Core
+    Cross -.-> Proto
 ```
 
 ### Key Components
