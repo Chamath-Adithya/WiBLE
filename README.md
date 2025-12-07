@@ -164,24 +164,24 @@ WiBLE uses a **five-layer architecture** for maximum flexibility:
 
 ```mermaid
 graph TD
-    App[Application Layer (Your Code)] --> Core[Core Services Layer]
+    App["Application Layer (Your Code)"] --> Core["Core Services Layer"]
     
-    subgraph Core [Core Services Layer]
-        State[State Machine]
-        Sec[Security Manager]
-        Orch[Provisioning Orchestrator]
+    subgraph Core ["Core Services Layer"]
+        State["State Machine"]
+        Sec["Security Manager"]
+        Orch["Provisioning Orchestrator"]
     end
     
-    Core --> Proto[Protocol Layer]
+    Core --> Proto["Protocol Layer"]
     
-    subgraph Proto [Protocol Layer]
-        BLE[BLE Manager]
-        WiFi[WiFi Manager]
+    subgraph Proto ["Protocol Layer"]
+        BLE["BLE Manager"]
+        WiFi["WiFi Manager"]
     end
     
-    Proto --> HAL[Platform Abstraction Layer (ESP32 APIs)]
+    Proto --> HAL["Platform Abstraction Layer (ESP32 APIs)"]
     
-    Cross[Cross-Cutting Concerns] -.-> Core
+    Cross["Cross-Cutting Concerns"] -.-> Core
     Cross -.-> Proto
 ```
 
