@@ -2,7 +2,7 @@
 AOS.init({
     once: true,
     offset: 50,
-    duration: 800,
+    duration: 1000,
     easing: 'ease-out-cubic',
 });
 
@@ -11,8 +11,8 @@ const themeToggle = document.getElementById('themeToggle');
 const html = document.documentElement;
 const icon = themeToggle ? themeToggle.querySelector('span') : null;
 
-// Check saved preference
-const savedTheme = localStorage.getItem('theme') || 'light';
+// Check saved preference or default to dark
+const savedTheme = localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', savedTheme);
 updateThemeIcon(savedTheme);
 
@@ -32,7 +32,7 @@ function updateThemeIcon(theme) {
     icon.textContent = theme === 'light' ? '🌙' : '☀️';
 }
 
-// Fluid Cursor Logic
+// Gravity Cursor Logic
 const cursorDot = document.querySelector('.cursor-dot');
 const cursorOutline = document.querySelector('.cursor-outline');
 
@@ -51,8 +51,8 @@ document.addEventListener('mousemove', (e) => {
 });
 
 function animateCursor() {
-    // Lerp (Linear Interpolation) for smooth delay
-    const speed = 0.15;
+    // Heavy Lerp for "Gravity" feel
+    const speed = 0.1;
     cursorX += (mouseX - cursorX) * speed;
     cursorY += (mouseY - cursorY) * speed;
 
@@ -64,50 +64,39 @@ function animateCursor() {
 
 animateCursor();
 
-// Magnetic Hover Effect
-const interactiveElements = document.querySelectorAll('a, button, .feature-card, .tilt-card, input, select');
+// Magnetic Pull Effect
+const magnets = document.querySelectorAll('a, button, .feature-card, .config-input');
 
-interactiveElements.forEach(el => {
-    el.addEventListener('mouseenter', () => {
+magnets.forEach(magnet => {
+    magnet.addEventListener('mousemove', (e) => {
+        const rect = magnet.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        // Calculate distance from center
+        const distX = e.clientX - centerX;
+        const distY = e.clientY - centerY;
+
+        // Pull the element towards the mouse (Magnetic effect)
+        // Divide by a factor to control strength (higher = weaker)
+        magnet.style.transform = `translate(${distX / 5}px, ${distY / 5}px)`;
+
+        // Expand cursor
         cursorOutline.style.width = '60px';
         cursorOutline.style.height = '60px';
-        cursorOutline.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+        cursorOutline.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
     });
 
-    el.addEventListener('mouseleave', () => {
+    magnet.addEventListener('mouseleave', () => {
+        // Reset position
+        magnet.style.transform = 'translate(0, 0)';
+
+        // Reset cursor
         cursorOutline.style.width = '40px';
         cursorOutline.style.height = '40px';
         cursorOutline.style.backgroundColor = 'transparent';
     });
 });
-
-// 3D Tilt Effect
-const cards = document.querySelectorAll('.tilt-card');
-
-cards.forEach(card => {
-    card.addEventListener('mousemove', handleMouseMove);
-    card.addEventListener('mouseleave', handleMouseLeave);
-});
-
-function handleMouseMove(e) {
-    const card = this;
-    const cardRect = card.getBoundingClientRect();
-
-    const cardCenterX = cardRect.left + cardRect.width / 2;
-    const cardCenterY = cardRect.top + cardRect.height / 2;
-
-    const mouseX = e.clientX - cardCenterX;
-    const mouseY = e.clientY - cardCenterY;
-
-    const rotateX = (mouseY / (cardRect.height / 2)) * -10;
-    const rotateY = (mouseX / (cardRect.width / 2)) * 10;
-
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-}
-
-function handleMouseLeave() {
-    this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-}
 
 // Interactive Configurator
 const configName = document.getElementById('configName');
