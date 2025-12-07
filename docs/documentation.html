@@ -55,15 +55,22 @@
             <h2 data-aos="fade-up">Architecture</h2>
             <p data-aos="fade-up">WiBLE uses a layered architecture to ensure security and reliability.</p>
 
-            <div class="feature-card" style="margin-top: 2rem;" data-aos="fade-up">
-                <pre class="mermaid">
-graph TD
-    App["Application Layer"] --> Core["Core Services"]
-    Core --> Proto["Protocol Layer"]
-    Proto --> HAL["ESP32 HAL"]
-                </pre>
-                <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);">* Note: Diagram simplified for
-                    web view.</p>
+            <div class="feature-card architecture-diagram" style="margin-top: 2rem;" data-aos="fade-up">
+                <div class="arch-layer">
+                    <div class="arch-box">Application Layer</div>
+                    <div class="arch-arrow">↓</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-box">Core Services</div>
+                    <div class="arch-arrow">↓</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-box">Protocol Layer</div>
+                    <div class="arch-arrow">↓</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-box arch-bottom">ESP32 HAL</div>
+                </div>
             </div>
         </div>
 
@@ -74,20 +81,21 @@ graph TD
                 <div class="feature-card" data-aos="fade-up">
                     <h3>WiBLE Class</h3>
                     <ul class="check-list">
-                        <li><code>begin(config)</code>: Initialize the library</li>
-                        <li><code>startProvisioning()</code>: Start BLE advertising</li>
-                        <li><code>loop()</code>: Handle events (call in loop)</li>
-                        <li><code>isProvisioned()</code>: Check status</li>
+                        <li><code><span class="code-function">begin</span>(config)</code>: Initialize the library</li>
+                        <li><code><span class="code-function">startProvisioning</span>()</code>: Start BLE advertising
+                        </li>
+                        <li><code><span class="code-function">loop</span>()</code>: Handle events (call in loop)</li>
+                        <li><code><span class="code-function">isProvisioned</span>()</code>: Check status</li>
                     </ul>
                 </div>
 
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
                     <h3>Callbacks</h3>
                     <ul class="check-list">
-                        <li><code>onWiFiConnected(cb)</code></li>
-                        <li><code>onProvisioningComplete(cb)</code></li>
-                        <li><code>onError(cb)</code></li>
-                        <li><code>onCustomDataReceived(cb)</code></li>
+                        <li><code><span class="code-function">onWiFiConnected</span>(cb)</code></li>
+                        <li><code><span class="code-function">onProvisioningComplete</span>(cb)</code></li>
+                        <li><code><span class="code-function">onError</span>(cb)</code></li>
+                        <li><code><span class="code-function">onCustomDataReceived</span>(cb)</code></li>
                     </ul>
                 </div>
             </div>
@@ -105,11 +113,11 @@ graph TD
                 </thead>
                 <tbody>
                     <tr style="border-bottom: 1px solid var(--border-color);">
-                        <td style="padding: 1rem;"><code>NONE</code></td>
+                        <td style="padding: 1rem;"><code><span class="code-keyword">NONE</span></code></td>
                         <td style="padding: 1rem;">No encryption (Development only)</td>
                     </tr>
                     <tr style="border-bottom: 1px solid var(--border-color);">
-                        <td style="padding: 1rem;"><code>SECURE</code></td>
+                        <td style="padding: 1rem;"><code><span class="code-keyword">SECURE</span></code></td>
                         <td style="padding: 1rem;">ECDH Key Exchange + AES-256 (Recommended)</td>
                     </tr>
                 </tbody>

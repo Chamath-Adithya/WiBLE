@@ -647,6 +647,43 @@ code {
     color: #c084fc;
 }
 
+/* Architecture Diagram */
+.architecture-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+
+.arch-layer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.arch-box {
+    background: linear-gradient(135deg, var(--primary-color), #8b5cf6);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: center;
+    min-width: 200px;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.arch-box.arch-bottom {
+    background: linear-gradient(135deg, #06b6d4, #3b82f6);
+}
+
+.arch-arrow {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    padding: 0.5rem 0;
+    font-weight: bold;
+}
+
 /* Features */
 .features {
     padding: 8rem 0;
