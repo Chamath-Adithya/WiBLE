@@ -211,17 +211,30 @@ body {
 
 /* Theme Toggle */
 .theme-toggle {
-    background: none;
-    border: none;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
     color: var(--text-muted);
     cursor: pointer;
-    padding: 0.5rem;
-    font-size: 1.1rem;
-    transition: color 0.2s;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(10px);
 }
 
 .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
     color: var(--text-color);
+    transform: scale(1.1);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
 }
 
 /* Buttons */
