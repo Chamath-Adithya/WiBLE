@@ -168,6 +168,13 @@ void BLEManager::ServerCallbacks::onDisconnect(BLEServer* server) {
     }
 }
 
+void BLEManager::ServerCallbacks::onMtuChanged(BLEServer* server, esp_ble_gatts_cb_param_t* param) {
+    LogManager::info("BLE MTU Changed: " + String(param->mtu.mtu));
+    if (manager->mtuChangeCallback) {
+        manager->mtuChangeCallback(param->mtu.mtu);
+    }
+}
+
 void BLEManager::CharacteristicCallbacks::onWrite(BLECharacteristic* characteristic) {
     std::string value = characteristic->getValue();
     std::vector<uint8_t> data(value.begin(), value.end());
@@ -231,7 +238,7 @@ void BLEManager::startBeacon(String uuid, uint16_t major, uint16_t minor, int8_t
     // Let's use a dummy UUID for now if parsing is complex, or try basic parsing.
     // Actually, BLEUUID class can parse it.
     BLEUUID bleUUID(uuid.c_str());
-    esp_bt_uuid_t rawUUID = bleUUID.getNative();
+    esp_bt_uuid_t rawUUID = *bleUUID.getNative();
     
     // Check if it's 128-bit
     if (rawUUID.len == 16) {
@@ -258,6 +265,23 @@ void BLEManager::startBeacon(String uuid, uint16_t major, uint16_t minor, int8_t
     advertising->start();
     advertisingActive = true;
     LogManager::info("iBeacon started");
+}
+
+void BLEManager::setManufacturerData(uint16_t companyId, uint8_t* data, size_t length) {
+    if (!advertising) return;
+    
+    std::string mfgData;
+    mfgData += (char)(companyId & 0xFF);
+    mfgData += (char)((companyId >> 8) & 0xFF);
+    
+    for(size_t i=0; i<length; i++) {
+        mfgData += (char)data[i];
+    }
+    
+    BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
+    oAdvertisementData.setFlags(0x04);
+    oAdvertisementData.setManufacturerData(mfgData);
+    advertising->setAdvertisementData(oAdvertisementData);
 }
 
 void BLEManager::startBroadcasting(uint16_t manufacturerId, const uint8_t* data, size_t length) {

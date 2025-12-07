@@ -537,7 +537,7 @@ public:
     
     void onConnect(BLEServer* server) override;
     void onDisconnect(BLEServer* server) override;
-    void onMtuChanged(BLEServer* server, uint16_t mtu) override;
+    void onMtuChanged(BLEServer* server, esp_ble_gatts_cb_param_t* param) override;
 
 private:
     BLEManager* manager;

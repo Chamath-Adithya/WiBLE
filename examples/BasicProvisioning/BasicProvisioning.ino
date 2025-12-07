@@ -31,7 +31,7 @@ using namespace WiBLE;
 // GLOBAL OBJECTS
 // ============================================================================
 
-WiBLE provisioner;
+WiBLE::WiBLE provisioner;
 
 // ============================================================================
 // CONFIGURATION
