@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize AOS
+    // Initialize Animate On Scroll
     AOS.init({
         once: true,
         offset: 50,
@@ -7,144 +7,96 @@ document.addEventListener('DOMContentLoaded', () => {
         easing: 'ease-out-cubic',
     });
 
-    // --- Particle System ---
-    const canvas = document.createElement('canvas');
-    canvas.id = 'particle-canvas';
-    document.body.prepend(canvas);
-    const ctx = canvas.getContext('2d');
+    // Theme System
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
 
-    let width, height;
-    let particles = [];
+    // Icons
+    const sunIcon = `<svg viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 000-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 000-1.41.996.996 0 00-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 000 1.41.996.996 0 001.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06z"/></svg>`;
+    const moonIcon = `<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>`;
 
-    function resize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
+    // Check saved preference or default to light
+    let savedTheme = 'light';
+    try {
+        savedTheme = localStorage.getItem('theme') || 'light';
+    } catch (e) {
+        console.warn('LocalStorage access denied', e);
     }
 
-    class Particle {
-        constructor() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height;
-            this.vx = (Math.random() - 0.5) * 0.5;
-            this.vy = (Math.random() - 0.5) * 0.5;
-            this.size = Math.random() * 2 + 1;
-            this.color = `rgba(255, 255, 255, ${Math.random() * 0.3})`;
-        }
+    html.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
 
-        update() {
-            this.x += this.vx;
-            this.y += this.vy;
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
-            if (this.x < 0) this.x = width;
-            if (this.x > width) this.x = 0;
-            if (this.y < 0) this.y = height;
-            if (this.y > height) this.y = 0;
-        }
-
-        draw() {
-            ctx.fillStyle = this.color;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    function initParticles() {
-        resize();
-        for (let i = 0; i < 50; i++) {
-            particles.push(new Particle());
-        }
-        animateParticles();
-    }
-
-    function animateParticles() {
-        ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => {
-            p.update();
-            p.draw();
+            html.setAttribute('data-theme', newTheme);
+            try {
+                localStorage.setItem('theme', newTheme);
+            } catch (e) { }
+            updateThemeIcon(newTheme);
         });
-        requestAnimationFrame(animateParticles);
     }
 
-    window.addEventListener('resize', resize);
-    initParticles();
+    function updateThemeIcon(theme) {
+        if (!themeToggle) return;
+        // If theme is light, show Moon (to switch to dark). If dark, show Sun (to switch to light).
+        themeToggle.innerHTML = theme === 'light' ? moonIcon : sunIcon;
+    }
 
-    // --- Magnetic Cursor ---
+    // Fluid Cursor Logic (Reverted to Phase 12 - Lighter, No Magnet)
     const cursorDot = document.querySelector('.cursor-dot');
     const cursorOutline = document.querySelector('.cursor-outline');
 
     if (cursorDot && cursorOutline) {
-        let mouseX = 0, mouseY = 0;
-        let cursorX = 0, cursorY = 0;
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
 
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
 
-            cursorDot.style.left = `${mouseX}px`;
-            cursorDot.style.top = `${mouseY}px`;
+            // Instant follow for dot
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
         });
 
         function animateCursor() {
-            const speed = 0.15;
+            // Lighter Lerp (Phase 12 feel)
+            const speed = 0.2;
             cursorX += (mouseX - cursorX) * speed;
             cursorY += (mouseY - cursorY) * speed;
 
-            cursorOutline.style.left = `${cursorX}px`;
-            cursorOutline.style.top = `${cursorY}px`;
+            cursorOutline.style.left = cursorX + 'px';
+            cursorOutline.style.top = cursorY + 'px';
 
             requestAnimationFrame(animateCursor);
         }
+
         animateCursor();
 
-        // Hover Effects
-        const interactiveElements = document.querySelectorAll('a, button, .glass-card, input, select');
+        // Simple Hover Effect (No Magnetic Pull)
+        const interactiveElements = document.querySelectorAll('a, button, .feature-card, .config-input, select, label');
+
         interactiveElements.forEach(el => {
             el.addEventListener('mouseenter', () => {
-                cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursorOutline.style.width = '60px';
+                cursorOutline.style.height = '60px';
                 cursorOutline.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                cursorOutline.style.borderColor = 'transparent';
             });
+
             el.addEventListener('mouseleave', () => {
-                cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursorOutline.style.width = '40px';
+                cursorOutline.style.height = '40px';
                 cursorOutline.style.backgroundColor = 'transparent';
-                cursorOutline.style.borderColor = 'rgba(255, 255, 255, 0.5)';
             });
         });
     }
 
-    // --- Navbar Scroll Effect ---
-    const navbar = document.querySelector('.navbar');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
-
-    // --- Mobile Menu ---
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const mobileNav = document.querySelector('.mobile-nav');
-
-    if (mobileMenuBtn && mobileNav) {
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileNav.classList.toggle('active');
-            document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-        });
-
-        // Close on link click
-        mobileNav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileNav.classList.remove('active');
-                document.body.style.overflow = '';
-            });
-        });
-    }
-
-    // --- Configurator Logic (Preserved) ---
+    // Interactive Configurator with Syntax Highlighting
     const configName = document.getElementById('configName');
     const configSecurity = document.getElementById('configSecurity');
     const configLogging = document.getElementById('configLogging');
@@ -156,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const security = configSecurity.value;
             const logging = configLogging.checked;
 
+            // Build code with syntax highlighting spans
             const code = `<span class="code-keyword">#include</span> &lt;<span class="code-type">WiBLE.h</span>&gt;
 
 <span class="code-type">WiBLE</span> provisioner;
@@ -180,22 +133,88 @@ document.addEventListener('DOMContentLoaded', () => {
         configName.addEventListener('input', updateCode);
         configSecurity.addEventListener('change', updateCode);
         configLogging.addEventListener('change', updateCode);
+
+        // Run once to set initial state
         updateCode();
+
+        // Copy to Clipboard Logic
+        const copyButton = document.getElementById('copyButton');
+        if (copyButton) {
+            copyButton.addEventListener('click', () => {
+                // Get raw text content (without HTML tags)
+                const textToCopy = codeBlock.textContent;
+
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalText = copyButton.innerHTML;
+
+                    // Show feedback
+                    copyButton.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Copied!</span>
+                    `;
+                    copyButton.style.background = 'rgba(74, 222, 128, 0.2)';
+                    copyButton.style.borderColor = 'rgba(74, 222, 128, 0.4)';
+                    copyButton.style.color = '#4ade80';
+
+                    setTimeout(() => {
+                        copyButton.innerHTML = originalText;
+                        copyButton.style.background = '';
+                        copyButton.style.borderColor = '';
+                        copyButton.style.color = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            });
+        }
     }
 
-    // Copy Button
-    const copyButton = document.getElementById('copyButton');
-    if (copyButton && codeBlock) {
-        copyButton.addEventListener('click', () => {
-            navigator.clipboard.writeText(codeBlock.textContent).then(() => {
-                const originalText = copyButton.innerHTML;
-                copyButton.innerHTML = '<span>Copied!</span>';
-                copyButton.style.color = '#0aff0a';
-                setTimeout(() => {
-                    copyButton.innerHTML = originalText;
-                    copyButton.style.color = '';
-                }, 2000);
+    // Mobile Menu Logic
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const mobileActions = document.querySelector('.mobile-actions');
+    // const themeToggle = document.getElementById('themeToggle'); // Removed duplicate declaration
+
+    if (hamburger && mobileMenu) {
+        // Clone theme toggle to mobile menu
+        if (themeToggle && mobileActions) {
+            const mobileThemeToggle = themeToggle.cloneNode(true);
+            mobileThemeToggle.id = 'mobileThemeToggle';
+            mobileThemeToggle.addEventListener('click', () => {
+                themeToggle.click(); // Trigger original toggle
+                // Update icon manually for the clone
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                updateMobileThemeIcon(mobileThemeToggle, isDark);
+            });
+            mobileActions.appendChild(mobileThemeToggle);
+
+            // Initial icon state
+            const isDark = localStorage.getItem('theme') === 'dark';
+            updateMobileThemeIcon(mobileThemeToggle, isDark);
+        }
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close menu when clicking a link
+        const mobileLinks = document.querySelectorAll('.mobile-nav-links a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
             });
         });
+    }
+
+    function updateMobileThemeIcon(btn, isDark) {
+        btn.innerHTML = isDark ?
+            `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>` :
+            `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
     }
 });

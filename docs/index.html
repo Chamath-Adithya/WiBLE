@@ -1,211 +1,251 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WiBLE - Secure ESP32 Provisioning | Antigravity Edition</title>
+    <title>WiBLE - Secure ESP32 Provisioning Library</title>
     <meta name="description"
         content="The ultimate secure gateway between BLE and Wi-Fi for ESP32. Features ECDH key exchange, AES-256 encryption, and <18s provisioning time.">
+    <meta name="keywords"
+        content="ESP32, Provisioning, BLE, WiFi, Security, ECDH, AES-256, Arduino, IoT, ESP32-C3, ESP32-S3">
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=Fira+Code&display=swap"
-        rel="stylesheet">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://chamath-adithya.github.io/WiBLE/">
+    <meta property="og:title" content="WiBLE - Secure ESP32 Provisioning">
+    <meta property="og:description"
+        content="Stop hardcoding credentials. Start using ECDH + AES-256. The most secure way to connect your IoT devices.">
+    <meta property="og:image" content="https://chamath-adithya.github.io/WiBLE/assets/images/og-image.png">
 
     <!-- Styles -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/main.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Fira+Code&display=swap"
+        rel="stylesheet">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "WiBLE",
+      "operatingSystem": "ESP32, Arduino",
+      "applicationCategory": "DeveloperApplication",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "A production-grade, secure, and scalable BLE provisioning library for ESP32/ESP32-C6.",
+      "author": {
+        "@type": "Person",
+        "name": "Chamath Adithya"
+      },
+      "softwareVersion": "2.0.0"
+    }
+    </script>
 </head>
 
 <body>
-    <!-- Custom Cursor -->
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
+    <div class="aurora-bg">
+        <div class="aurora-blob"></div>
+        <div class="aurora-blob"></div>
+        <div class="aurora-blob"></div>
+    </div>
+    <div class="noise-overlay"></div>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container nav-content">
-            <a href="index.html" class="logo">WiBLE<span class="text-neon">.</span></a>
+    <nav class="navbar" data-aos="fade-down" data-aos-duration="1000">
+        <div class="container">
+            <a href="index.html" class="logo">
+                WiBLE<span class="dot-logo">.</span>
+            </a>
+
+            <button class="hamburger" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
             <div class="nav-links">
-                <a href="#features" class="nav-link">Features</a>
-                <a href="#configurator" class="nav-link">Configurator</a>
-                <a href="documentation.html" class="nav-link">Docs</a>
-                <a href="https://github.com/Chamath-Adithya/WiBLE" class="nav-link">GitHub</a>
+                <a href="get-started.html">Start</a>
+                <a href="documentation.html">Docs</a>
+                <a href="examples.html">Examples</a>
+                <a href="community.html">Community</a>
+                <a href="blog.html">Blog</a>
+                <a href="faq.html">FAQ</a>
+                <a href="contact.html">Contact</a>
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme"></button>
+                <a href="https://github.com/Chamath-Adithya/WiBLE" class="btn btn-sm glass-btn">
+                    <svg height="20" viewBox="0 0 16 16" width="20" fill="currentColor" style="margin-right: 4px">
+                        <path
+                            d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z">
+                        </path>
+                    </svg>
+                    GitHub
+                </a>
             </div>
 
-            <button class="mobile-menu-btn" aria-label="Menu">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
+            <!-- Mobile Menu Overlay -->
+            <div class="mobile-menu">
+                <div class="mobile-nav-links">
+                    <a href="get-started.html">Start</a>
+                    <a href="documentation.html">Docs</a>
+                    <a href="examples.html">Examples</a>
+                    <a href="community.html">Community</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="faq.html">FAQ</a>
+                    <a href="contact.html">Contact</a>
+                    <div class="mobile-actions">
+                        <!-- Theme toggle will be cloned here via JS -->
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-nav">
-        <a href="#features" class="nav-link" style="font-size: 1.5rem;">Features</a>
-        <a href="#configurator" class="nav-link" style="font-size: 1.5rem;">Configurator</a>
-        <a href="documentation.html" class="nav-link" style="font-size: 1.5rem;">Docs</a>
-        <a href="https://github.com/Chamath-Adithya/WiBLE" class="nav-link" style="font-size: 1.5rem;">GitHub</a>
-    </div>
-
-    <!-- Hero Section -->
     <header class="hero">
-        <div class="container">
-            <div class="hero-content" data-aos="fade-up">
-                <div class="badge glass-card"
-                    style="display: inline-block; padding: 0.5rem 1rem; margin-bottom: 2rem; border-radius: 50px; font-size: 0.875rem;">
-                    <span class="text-neon">●</span> v2.0.0 Now Available
-                </div>
-                <h1 class="hero-title">
-                    Secure IoT <br>
-                    <span class="text-gradient">Without Gravity.</span>
-                </h1>
-                <p class="hero-subtitle">
+        <div class="container hero-grid">
+            <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+                <span class="badge">v2.0.0 Released</span>
+                <h1>Secure ESP32 Provisioning <br> <span class="text-gradient">Made Simple.</span></h1>
+                <p class="hero-text">
                     Stop hardcoding credentials. Start using <strong>ECDH + AES-256</strong>.
-                    The most secure, reliable, and developer-friendly way to connect your ESP32 devices.
+                    The most secure, reliable, and developer-friendly way to connect your IoT devices.
                 </p>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <a href="get-started.html" class="btn btn-primary">Get Started</a>
-                    <a href="documentation.html" class="btn btn-glass">Read Documentation</a>
+                <div class="cta-group">
+                    <a href="get-started.html" class="btn btn-primary glow-effect">
+                        Get Started
+                    </a>
+                    <a href="documentation.html" class="btn btn-secondary glass-btn">Read Docs</a>
                 </div>
             </div>
 
-            <!-- 3D Floating Elements (Visual Only) -->
-            <div class="floating-element"
-                style="top: 20%; right: 10%; width: 100px; height: 100px; background: linear-gradient(45deg, var(--neon-blue), transparent); border-radius: 50%; filter: blur(40px); opacity: 0.5; animation: float 6s ease-in-out infinite;">
-            </div>
-            <div class="floating-element"
-                style="bottom: 20%; left: 5%; width: 150px; height: 150px; background: linear-gradient(45deg, var(--neon-purple), transparent); border-radius: 50%; filter: blur(50px); opacity: 0.4; animation: float 8s ease-in-out infinite reverse;">
+            <div class="hero-visual" data-aos="fade-left" data-aos-duration="1200" data-aos-delay="200">
+                <div class="chip-3d-container">
+                    <div class="chip-3d">
+                        <div class="chip-face chip-front">ESP32</div>
+                        <div class="chip-face chip-back"></div>
+                        <div class="chip-face chip-left"></div>
+                        <div class="chip-face chip-right"></div>
+                        <div class="chip-face chip-top"></div>
+                        <div class="chip-face chip-bottom"></div>
+                    </div>
+                    <div class="orbit-ring">
+                        <div class="orbit-dot"></div>
+                        <div class="orbit-dot"></div>
+                        <div class="orbit-dot"></div>
+                    </div>
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring delay-1"></div>
+                    <div class="pulse-ring delay-2"></div>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Features Section -->
-    <section id="features" style="padding: 8rem 0;">
+    <section id="configurator" class="configurator">
         <div class="container">
-            <div style="text-align: center; margin-bottom: 5rem;" data-aos="fade-up">
-                <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Engineered for <span
-                        class="text-neon">Performance</span></h2>
-                <p style="color: var(--text-muted);">Built to handle the toughest IoT provisioning challenges.</p>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                <div class="glass-card" style="padding: 2.5rem;" data-aos="fade-up" data-aos-delay="100">
-                    <div style="font-size: 2rem; margin-bottom: 1.5rem;">🛡️</div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Military-Grade Security</h3>
-                    <p style="color: var(--text-muted); line-height: 1.6;">
-                        Uses Elliptic Curve Diffie-Hellman (ECDH) for key exchange and AES-256 for data encryption. Your
-                        credentials never travel in plain text.
-                    </p>
+            <h2 class="section-title" data-aos="fade-up">Interactive Configurator</h2>
+            <div class="config-container">
+                <div class="config-panel" data-aos="fade-right">
+                    <div class="config-group">
+                        <label>Device Name</label>
+                        <input type="text" id="configName" class="config-input" value="My-ESP32"
+                            placeholder="e.g. Living-Room-Light">
+                    </div>
+                    <div class="config-group">
+                        <label>Security Level</label>
+                        <select id="configSecurity" class="config-input">
+                            <option value="SECURE">SECURE (ECDH + AES)</option>
+                            <option value="NONE">NONE (Dev Only)</option>
+                        </select>
+                    </div>
+                    <div class="config-group">
+                        <label class="config-toggle">
+                            <input type="checkbox" id="configLogging" checked>
+                            Enable Serial Logging
+                        </label>
+                    </div>
                 </div>
 
-                <div class="glass-card" style="padding: 2.5rem;" data-aos="fade-up" data-aos-delay="200">
-                    <div style="font-size: 2rem; margin-bottom: 1.5rem;">⚡</div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Lightning Fast</h3>
-                    <p style="color: var(--text-muted); line-height: 1.6;">
-                        Optimized MTU negotiation and non-blocking state machine logic deliver provisioning times under
-                        18 seconds.
-                    </p>
-                </div>
+                <div class="code-window" data-aos="fade-left">
+                    <div class="window-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="filename">main.cpp</span>
+                        <button id="copyButton" class="copy-btn" aria-label="Copy Code">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                    <pre><code id="generatedCode">#include &lt;WiBLE.h&gt;
 
-                <div class="glass-card" style="padding: 2.5rem;" data-aos="fade-up" data-aos-delay="300">
-                    <div style="font-size: 2rem; margin-bottom: 1.5rem;">🛠️</div>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Developer Centric</h3>
-                    <p style="color: var(--text-muted); line-height: 1.6;">
-                        Simple C++ API, comprehensive documentation, and ready-to-run examples for ESP32, C3, and S3.
-                    </p>
+WiBLE provisioner;
+
+void setup() {
+    Serial.begin(115200);
+    
+    ProvisioningConfig config;
+    config.deviceName = "My-ESP32";
+    config.securityLevel = SecurityLevel::SECURE;
+    
+    provisioner.begin(config);
+    provisioner.startProvisioning();
+}
+
+void loop() {
+    provisioner.loop();
+}</code></pre>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Configurator Section -->
-    <section id="configurator"
-        style="padding: 8rem 0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.5));">
+    <section id="features" class="features">
         <div class="container">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
-                <div data-aos="fade-right">
-                    <h2 style="font-size: 2.5rem; margin-bottom: 2rem;">Interactive Configurator</h2>
-                    <div class="glass-card" style="padding: 2rem;">
-                        <div style="margin-bottom: 1.5rem;">
-                            <label style="display: block; color: var(--text-muted); margin-bottom: 0.5rem;">Device
-                                Name</label>
-                            <input type="text" id="configName" value="My-ESP32"
-                                style="width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; border-radius: 8px;">
-                        </div>
-                        <div style="margin-bottom: 1.5rem;">
-                            <label style="display: block; color: var(--text-muted); margin-bottom: 0.5rem;">Security
-                                Level</label>
-                            <select id="configSecurity"
-                                style="width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; border-radius: 8px;">
-                                <option value="SECURE">SECURE (ECDH + AES)</option>
-                                <option value="NONE">NONE (Dev Only)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label
-                                style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted); cursor: pointer;">
-                                <input type="checkbox" id="configLogging" checked> Enable Serial Logging
-                            </label>
-                        </div>
+            <h2 class="section-title" data-aos="fade-up">Why WiBLE?</h2>
+            <div class="feature-grid">
+                <div class="feature-card tilt-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="card-content">
+                        <div class="icon-box floating-icon">🛡️</div>
+                        <h3>Security First</h3>
+                        <p>ECDH key exchange and AES-256 encryption ensure credentials are never exposed.</p>
                     </div>
                 </div>
-
-                <div class="glass-card" style="overflow: hidden;" data-aos="fade-left">
-                    <div
-                        style="padding: 1rem; background: rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
-                        <div style="display: flex; gap: 0.5rem;">
-                            <div style="width: 10px; height: 10px; border-radius: 50%; background: #ff5f56;"></div>
-                            <div style="width: 10px; height: 10px; border-radius: 50%; background: #ffbd2e;"></div>
-                            <div style="width: 10px; height: 10px; border-radius: 50%; background: #27c93f;"></div>
-                        </div>
-                        <button id="copyButton"
-                            style="background: none; border: none; color: var(--text-muted); font-size: 0.875rem; cursor: pointer;">Copy
-                            Code</button>
+                <div class="feature-card tilt-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-content">
+                        <div class="icon-box floating-icon delay-1">⚡</div>
+                        <h3>Blazing Fast</h3>
+                        <p>Optimized MTU negotiation and state machine logic deliver < 18s provisioning times.</p>
                     </div>
-                    <pre
-                        style="padding: 2rem; overflow-x: auto; margin: 0;"><code id="generatedCode" style="font-family: 'Fira Code', monospace; color: #e2e8f0;"></code></pre>
+                </div>
+                <div class="feature-card tilt-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-content">
+                        <div class="icon-box floating-icon delay-2">🛠️</div>
+                        <h3>Developer Friendly</h3>
+                        <p>Simple API, comprehensive documentation, and ready-to-use examples.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <a href="#" class="logo" style="margin-bottom: 1rem; display: block;">WiBLE<span
-                            class="text-neon">.</span></a>
-                    <p style="color: var(--text-muted);">Secure provisioning for the modern IoT ecosystem.</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Product</h4>
-                    <a href="get-started.html">Get Started</a>
-                    <a href="documentation.html">Documentation</a>
-                    <a href="examples.html">Examples</a>
-                </div>
-                <div class="footer-col">
-                    <h4>Community</h4>
-                    <a href="https://github.com/Chamath-Adithya/WiBLE">GitHub</a>
-                    <a href="https://github.com/Chamath-Adithya/WiBLE/issues">Issues</a>
-                    <a href="https://github.com/Chamath-Adithya/WiBLE/discussions">Discussions</a>
-                </div>
-                <div class="footer-col">
-                    <h4>Legal</h4>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                </div>
-            </div>
-            <div
-                style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); text-align: center; color: var(--text-muted); font-size: 0.875rem;">
-                &copy; 2025 WiBLE. Built by Chamath Adithya.
+            <p>&copy; 2025 WiBLE. Built by <a href="https://github.com/Chamath-Adithya">Chamath Adithya</a>.</p>
+            <div class="social-links">
+                <a href="https://github.com/Chamath-Adithya/">GitHub</a>
+                <a href="https://www.linkedin.com/in/chamath-adithya-senanayaka-90264936b/">LinkedIn</a>
             </div>
         </div>
     </footer>
@@ -213,20 +253,6 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="assets/js/main.js"></script>
-
-    <style>
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-    </style>
 </body>
 
 </html>
