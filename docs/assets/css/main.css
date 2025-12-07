@@ -606,6 +606,25 @@ pre code {
     color: #e2e8f0;
 }
 
+/* Inline Code (not in pre) */
+code {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    background: var(--code-bg);
+    color: #e2e8f0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.9em;
+}
+
+/* Feature card code blocks */
+.feature-card pre {
+    background: var(--code-bg);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
 /* Syntax Highlighting */
 .code-keyword {
     color: #60a5fa;

@@ -59,8 +59,8 @@
                 <div class="feature-card" data-aos="fade-right">
                     <h3>PlatformIO (Recommended)</h3>
                     <p>Add the following to your <code>platformio.ini</code> file:</p>
-                    <pre><code>lib_deps = 
-    Chamath-Adithya/WiBLE@^2.0.0</code></pre>
+                    <pre><code><span class="code-keyword">lib_deps</span> = 
+    Chamath-Adithya/WiBLE@^<span class="code-string">2.0.0</span></code></pre>
                 </div>
 
                 <div class="feature-card" data-aos="fade-left">
@@ -78,9 +78,9 @@
 
             <div class="feature-card" style="margin-top: 2rem;" data-aos="fade-up">
                 <h3>PlatformIO Configuration</h3>
-                <pre><code>board_build.partitions = huge_app.csv
-; OR if you need OTA:
-; board_build.partitions = min_spiffs.csv</code></pre>
+                <pre><code><span class="code-keyword">board_build.partitions</span> = <span class="code-string">huge_app.csv</span>
+<span class="code-comment">; OR if you need OTA:</span>
+<span class="code-comment">; board_build.partitions = min_spiffs.csv</span></code></pre>
             </div>
         </div>
 
@@ -89,23 +89,23 @@
             <p data-aos="fade-up">Copy this code into your <code>main.cpp</code> or <code>.ino</code> file:</p>
 
             <div class="code-window" style="margin-top: 2rem;" data-aos="fade-up">
-                <pre><code>#include &lt;WiBLE.h&gt;
+                <pre><code><span class="code-keyword">#include</span> &lt;<span class="code-type">WiBLE.h</span>&gt;
 
-WiBLE provisioner;
+<span class="code-type">WiBLE</span> provisioner;
 
-void setup() {
-    Serial.begin(115200);
+<span class="code-keyword">void</span> <span class="code-function">setup</span>() {
+    <span class="code-function">Serial.begin</span>(<span class="code-string">115200</span>);
     
-    ProvisioningConfig config;
-    config.deviceName = "My-ESP32";
-    config.securityLevel = SecurityLevel::SECURE;
+    <span class="code-type">ProvisioningConfig</span> config;
+    config.deviceName = <span class="code-string">"My-ESP32"</span>;
+    config.securityLevel = <span class="code-type">SecurityLevel</span>::<span class="code-keyword">SECURE</span>;
     
-    provisioner.begin(config);
-    provisioner.startProvisioning();
+    provisioner.<span class="code-function">begin</span>(config);
+    provisioner.<span class="code-function">startProvisioning</span>();
 }
 
-void loop() {
-    provisioner.loop();
+<span class="code-keyword">void</span> <span class="code-function">loop</span>() {
+    provisioner.<span class="code-function">loop</span>();
 }</code></pre>
             </div>
         </div>
