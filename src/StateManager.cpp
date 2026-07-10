@@ -267,6 +267,40 @@ void StateManager::addTransition(const StateTransition& transition) {
     transitions.insert({key, transition});
 }
 
+// Timeout management
+void StateManager::setStateTimeout(ProvisioningState state, uint32_t timeoutMs) {
+    stateTimeouts[state] = timeoutMs;
+}
+
+void StateManager::checkTimeouts() {
+    auto it = stateTimeouts.find(currentState);
+    if (it != stateTimeouts.end()) {
+        uint32_t elapsed = getTimeInCurrentState();
+        if (elapsed > it->second) {
+            LogManager::warn("State timeout in " + StateUtils::stateToString(currentState));
+            if (timeoutCallback) {
+                timeoutCallback(currentState, elapsed);
+            }
+            // Trigger timeout event based on state
+            if (currentState == ProvisioningState::CONNECTING_WIFI) {
+                handleEvent(StateEvent::CONNECTION_TIMEOUT);
+            } else if (currentState == ProvisioningState::AUTHENTICATING) {
+                handleEvent(StateEvent::AUTH_TIMEOUT);
+            } else {
+                handleEvent(StateEvent::PROVISIONING_TIMEOUT);
+            }
+        }
+    }
+}
+
+void StateManager::clearStateTimeout(ProvisioningState state) {
+    stateTimeouts.erase(state);
+}
+
+void StateManager::onStateTimeout(StateTimeoutCallback callback) {
+    timeoutCallback = callback;
+}
+
 // Callback registration
 void StateManager::onStateEntry(StateEntryCallback callback) { entryCallback = callback; }
 void StateManager::onStateExit(StateExitCallback callback) { exitCallback = callback; }
