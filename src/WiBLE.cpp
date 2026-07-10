@@ -105,13 +105,15 @@ void WiBLE::loop() {
     if (!initialized) return;
     
     // 1. Update State Machine
-    // stateManager->checkTimeouts(); // TODO: Implement checkTimeouts
+    if (stateManager) {
+        stateManager->checkTimeouts();
+    }
     
     // 2. Process BLE Operations
-    // if (bleManager) bleManager->processOperationQueue();
+    if (bleManager) bleManager->processOperationQueue();
     
     // 3. Monitor WiFi
-    // if (wifiManager) wifiManager->monitor();
+    if (wifiManager) wifiManager->monitor();
 }
 
 void WiBLE::end() {
@@ -139,8 +141,7 @@ bool WiBLE::isBLEConnected() const {
 }
 
 bool WiBLE::isWiFiConnected() const {
-    // return wifiManager && wifiManager->isConnected();
-    return false; // Placeholder
+    return wifiManager && wifiManager->isConnected();
 }
 
 // ============================================================================
@@ -171,15 +172,20 @@ Result<bool> WiBLE::provisionManually(const WiFiCredentials& credentials) {
         return Result<bool>(ErrorCode::WIFI_CREDENTIALS_INVALID, "Invalid credentials");
     }
     
-    // TODO: Implement manual provisioning logic
-    // 1. Set credentials
-    // 2. Trigger WiFi connect
+    if (wifiManager) {
+        if (config.persistCredentials) {
+            wifiManager->saveCredentials(credentials.ssid, credentials.password);
+        }
+        return connectWiFi(credentials);
+    }
     
-    return Result<bool>(true);
+    return Result<bool>(ErrorCode::WIFI_INIT_FAILED, "WiFi Manager not initialized");
 }
 
 void WiBLE::clearProvisioning() {
-    // TODO: Clear credentials from storage
+    if (wifiManager) {
+        wifiManager->clearCredentials();
+    }
     if (stateManager) {
         stateManager->reset();
     }
@@ -305,12 +311,55 @@ void WiBLE::handleStateTransition(ProvisioningState newState) {
 // PLACEHOLDER METHODS (To satisfy header)
 // ============================================================================
 
-std::vector<String> WiBLE::scanWiFiNetworks(bool showHidden) { return {}; }
-Result<bool> WiBLE::connectWiFi(const WiFiCredentials& credentials) { return Result<bool>(false); }
-void WiBLE::disconnectWiFi() {}
-String WiBLE::getWiFiStatus() const { return "Disconnected"; }
-String WiBLE::getIPAddress() const { return "0.0.0.0"; }
-int8_t WiBLE::getWiFiRSSI() const { return 0; }
+std::vector<String> WiBLE::scanWiFiNetworks(bool showHidden) {
+    std::vector<String> ssids;
+    if (wifiManager) {
+        auto networks = wifiManager->scanNetworks(showHidden);
+        for (const auto& net : networks) {
+            ssids.push_back(net.ssid);
+        }
+    }
+    return ssids;
+}
+
+Result<bool> WiBLE::connectWiFi(const WiFiCredentials& credentials) {
+    if (wifiManager) {
+        // Simple security type mapping fallback to WPA2
+        WiFiSecurityType secType = WiFiSecurityType::WPA2_PSK;
+        if (credentials.securityType == "OPEN") secType = WiFiSecurityType::OPEN;
+        else if (credentials.securityType == "WEP") secType = WiFiSecurityType::WEP;
+
+        ConnectionResult res = wifiManager->connect(credentials.ssid, credentials.password, secType);
+        if (res.success) return Result<bool>(true);
+        else return Result<bool>(ErrorCode::WIFI_CONNECTION_FAILED, res.errorMessage);
+    }
+    return Result<bool>(ErrorCode::WIFI_INIT_FAILED, "WiFi Manager not initialized");
+}
+
+void WiBLE::disconnectWiFi() {
+    if (wifiManager) wifiManager->disconnect();
+}
+
+String WiBLE::getWiFiStatus() const {
+    if (wifiManager) {
+        return wifiManager->isConnected() ? "Connected" : "Disconnected";
+    }
+    return "Disconnected";
+}
+
+String WiBLE::getIPAddress() const {
+    if (wifiManager && wifiManager->isConnected()) {
+        return wifiManager->getIPAddress();
+    }
+    return "0.0.0.0";
+}
+
+int8_t WiBLE::getWiFiRSSI() const {
+    if (wifiManager && wifiManager->isConnected()) {
+        return wifiManager->getConnectionInfo().rssi;
+    }
+    return 0;
+}
 bool WiBLE::setEncryptionKey(const uint8_t* key, size_t length) { return false; }
 void WiBLE::setSecureMode(bool enabled) {}
 bool WiBLE::isSecureConnectionEstablished() const { return false; }

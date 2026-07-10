@@ -203,7 +203,57 @@ void BLEManager::CharacteristicCallbacks::onNotify(BLECharacteristic* characteri
 bool BLEManager::isAdvertising() const { return advertisingActive; }
 bool BLEManager::isConnected() const { return bleServer->getConnectedCount() > 0; }
 uint8_t BLEManager::getConnectionCount() const { return bleServer->getConnectedCount(); }
-void BLEManager::processOperationQueue() { /* TODO: Implement queue processing */ }
+
+void BLEManager::enqueueOperation(const GATTOperation& operation) {
+    if (xSemaphoreTake(queueMutex, portMAX_DELAY)) {
+        operationQueue.push(operation);
+        xSemaphoreGive(queueMutex);
+    }
+}
+
+void BLEManager::processOperationQueue() {
+    if (processingOperation) {
+        return;
+    }
+
+    if (xSemaphoreTake(queueMutex, 0)) {
+        if (!operationQueue.empty()) {
+            GATTOperation op = operationQueue.front();
+            operationQueue.pop();
+            xSemaphoreGive(queueMutex);
+
+            processingOperation = true;
+            bool success = executeOperation(op);
+            if (!success && op.retryCount < op.maxRetries) {
+                op.retryCount++;
+                enqueueOperation(op);
+            } else if (op.callback) {
+                op.callback(success, std::vector<uint8_t>());
+            }
+            processingOperation = false;
+        } else {
+            xSemaphoreGive(queueMutex);
+        }
+    }
+}
+
+void BLEManager::clearOperationQueue() {
+    if (xSemaphoreTake(queueMutex, portMAX_DELAY)) {
+        while (!operationQueue.empty()) {
+            operationQueue.pop();
+        }
+        xSemaphoreGive(queueMutex);
+    }
+}
+
+bool BLEManager::executeOperation(const GATTOperation& operation) {
+    // Basic implementation for write/notify operations
+    if (operation.type == GATTOperationType::NOTIFY) {
+        return notify(operation.characteristicUUID, operation.data);
+    }
+    return true; // Placeholder for other types
+}
+
 void BLEManager::onConnection(BLEConnectionCallback callback) { connectionCallback = callback; }
 void BLEManager::setScanCallback(BLEScanCallback callback) {
     scanCallback = callback;
